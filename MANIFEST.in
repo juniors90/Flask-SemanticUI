@@ -1,0 +1,10 @@
+include LICENSE
+include README.md
+recursive-include flask_semanticui/static *
+recursive-include flask_semanticui/templates *.html
+
+exclude tox.ini
+exclude pyproject.toml
+recursive-exclude tests *
+recursive-exclude docs *
+recursive-exclude res *
