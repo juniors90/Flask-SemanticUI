@@ -128,7 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-templates/
-static/
-app.py
-forms.py
+sample_app/

@@ -1,0 +1,67 @@
+{% macro flashed_messages(messages=None, title=None, container=True, transform={
+  'critical': 'danger',
+  'error': 'danger',
+  'info': 'info',
+  'warning': 'warning',
+  'debug': 'info',
+  'notset': 'info',
+  'message': 'info',
+  'success': 'info',
+  'list': 'info'
+}, default_category=None, dismissible=False) -%}
+
+<!-- Message flashing -->
+{% with messages = messages or get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% if container -%}
+        <!-- begin message block -->
+			<div id="alert" class="ui text container">
+		{% endif %}
+				    {% for category, message in messages %}
+					    <div class="ui {% if category == 'debug' %} floating {% elif category == 'critical' %} error {% else %} {{ category }} {% endif %} message">
+					        {% if dismissible %}<i class="close icon" onclick="dismissibleItem()"></i>{% endif %}
+							<div class="header"> {% if category in ['critical', 'error', 'info','warning'] %} {{ category.title() }} {% else %} Message {% endif %}</div>
+							
+							{% if category == 'list' %}
+							    {% for msg in message %}
+							        <ul class="list">
+							            <li>{{msg}}:</li>
+							        </ul>
+								{% endfor %}
+							{% else %}
+							    <p>{{ message }}</p>
+							{% endif %}
+						</div>
+					{% endfor %}
+		{% if container %}
+			</div>
+		<!-- end message block -->
+		{% endif -%}
+	{% endif %}
+{% endwith %}
+<!-- end Message flashing -->
+
+{% endmacro -%}
+
+
+{% macro icon(type=None, color=None) -%}
+<i class="{% if color %}{{ type + ' ' + color}} {% else %} {{ type }} {% endif %} icon"></i>
+{%- endmacro %}
+
+
+{% macro form_button(url, content, method='post', class_btn='ui submit button') -%}
+<form class="ui form error" style="display: inline;" action='{{url}}' method='{{method}}'><button class="{{class_btn|safe}}">{{content}}</button></form>
+{%- endmacro %}
+
+<!-- Highlight the current tab -->
+{% macro nav_link(endpoint, text, icon, color=None) %}
+	{% if request.endpoint is not none %}
+		{% if request.endpoint.endswith(endpoint) %}
+		    <a class="active {% if color %} {{ color }} {% endif %}item" href="{{ url_for(endpoint) }}"><i class="{{ icon }} icon"></i>{{ text }}</a>
+		{% else %}
+		    <a class="item" href="{{ url_for(endpoint) }}"><i class="{{ icon }} icon"></i>{{ text }}</a>
+		{% endif %}
+	{% else %}
+    	    <a class="item" href="{{ url_for(endpoint) }}"><i class="{{ icon }} icon"></i>{{ text }}</a>
+	{% endif %}
+{% endmacro %}

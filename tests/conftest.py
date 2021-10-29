@@ -12,6 +12,7 @@ def app() -> "flask.Flask":
     app.testing = True
     return app
 
+
 @pt.fixture
-def client(app:"flask.Flask") -> "FlaskClient":
+def client(app: "flask.Flask") -> "FlaskClient":
     return app.test_client()
