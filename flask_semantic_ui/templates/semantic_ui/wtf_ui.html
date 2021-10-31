@@ -77,7 +77,7 @@
     <fieldset>
     <legend>{{field.label}}</legend>
     {%- for subfield in field %}
-      {% if not bootstrap_is_hidden_field(subfield) -%}
+      {% if not semantic_ui_is_hidden_field(subfield) -%}
         {{ form_field(subfield,
                       form_type=form_type,
                       horizontal_columns=horizontal_columns,
