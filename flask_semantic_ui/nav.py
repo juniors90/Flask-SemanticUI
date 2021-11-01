@@ -43,7 +43,7 @@ class SemanticUIRenderer(Visitor):
     _in_dropdown = attr.ib(
         default=False, validator=attr.validators.instance_of(bool)
     )
-    id = attr.ib(default=None, validator=attr.validators.instance_of(None))
+    id = attr.ib(default=None)
 
     def visit_Navbar(self, node):
         """Create a navbar id that is somewhat fixed.
@@ -53,7 +53,7 @@ class SemanticUIRenderer(Visitor):
         Parameters
         ----------
         node: ``str``
-            A node
+            The node to visit.
         Return
         ------
             A root of navbar.
@@ -87,14 +87,15 @@ class SemanticUIRenderer(Visitor):
         Parameters
         ----------
         node: ``str``
-            A node.
+            The node to visit.
         Return
         ------
             A <div> item with a text for the navbar.
         """
         if not self._in_dropdown:
             return tags.p(node.text, _class="item")
-        return tags.div(node.text, _class="item")
+        divs = tags.div(node.text, _class="item")
+        return divs
 
     def visit_Link(self, node):
         """Create a link field for the navbar.
@@ -102,7 +103,7 @@ class SemanticUIRenderer(Visitor):
         Parameters
         ----------
         node: ``str``
-            A node.
+            The node to visit.
         Return
         ------
             A link item <a> with a text for the navbar.
@@ -118,7 +119,7 @@ class SemanticUIRenderer(Visitor):
         Parameters
         ----------
         node: ``str``
-            A node.
+            The node to visit.
         Return
         ------
             A divider item for the navbar.
@@ -133,7 +134,7 @@ class SemanticUIRenderer(Visitor):
         Parameters
         ----------
         node: ``str``
-            A node.
+            The node to visit.
         icon: ``str``
             An icon for the ite. Default value: ``"home icon"``.
         Return
@@ -172,7 +173,7 @@ class SemanticUIRenderer(Visitor):
         Parameters
         ----------
         node: ``str``
-            A node.
+            The node to visit.
         Return
         ------
             A menu for the navbar.
@@ -192,7 +193,7 @@ class SemanticUIRenderer(Visitor):
         Parameters
         ----------
         node: ``str``
-            A node.
+            The node to visit.
         Return
         ------
             A menu for the footer.

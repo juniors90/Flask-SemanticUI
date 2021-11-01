@@ -45,13 +45,12 @@ else:
         return isinstance(field, HiddenField)
 
 
-from . import __version__
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-
-SEMANTIC_UI_VERS = re.sub(r"^(\d+\.\d+\.\d+).*", r"\1", __version__)
+ABANDONED_VERSION = "2.4.2"
+SEMANTIC_UI_VERS = re.sub(r"^(\d+\.\d+\.\d+).*", r"\1", ABANDONED_VERSION)
 SEMANTIC_UI_LOCAL_VERSION = "2.4.0"
 JQUERY_VERSION = "3.6.0"
 JS_VERSION = "2.4.2"
@@ -100,9 +99,6 @@ def semantic_ui_find_resource(
         list_file = list(filename.rsplit(".", 1))
         filename = list_file[0] + ".min." + list_file[1]
 
-    if jquery:
-        filename = ".min.js"
-
     cdns = current_app.extensions["semantic_ui"]["cdns"]
     resource_url = cdns[cdn].get_resource_url(filename)
 
@@ -112,24 +108,24 @@ def semantic_ui_find_resource(
     return resource_url
 
 
-def raise_helper(message):  # noqa
-    raise RuntimeError(message)
+# def raise_helper(message):  # noqa
+#    raise RuntimeError(message)
 
 
-def get_sui_table_titles(data, primary_key, primary_key_title):
-    """Detect and build the table titles tuple from ORM object.
-
-    .. note::
-        Currently only support SQLAlchemy.
-    """
-    if not data:
-        return []
-    titles = []
-    for k in data[0].__table__.columns.keys():
-        if not k.startswith("_"):
-            titles.append((k, k.replace("_", " ").title()))
-    titles[0] = (primary_key, primary_key_title)
-    return titles
+#def get_sui_table_titles(data, primary_key, primary_key_title):
+#    """Detect and build the table titles tuple from ORM object.
+#
+#    .. note::
+#        Currently only support SQLAlchemy.
+#    """
+#    if not data:
+#        return []
+#    titles = []
+#    for k in data[0].__table__.columns.keys():
+#        if not k.startswith("_"):
+#            titles.append((k, k.replace("_", " ").title()))
+#    titles[0] = (primary_key, primary_key_title)
+#    return titles
 
 
 # =============================================================================
@@ -137,13 +133,13 @@ def get_sui_table_titles(data, primary_key, primary_key_title):
 # =============================================================================
 
 
-@attr.s
-class CDN(object):
-    """Base class for CDN objects."""
-
-    def get_resource_url(self, filename):
-        """Return resource url for filename."""
-        raise NotImplementedError
+#@attr.s
+#class CDN(object):
+#    """Base class for CDN objects."""
+#
+#    def get_resource_url(self, filename):
+#        """Return resource url for filename."""
+#        raise NotImplementedError
 
 
 @attr.s(repr=False)
@@ -180,7 +176,7 @@ class StaticCDN(object):
         extra_args = {}
 
         if self.rev and current_app.config["SEMANTIC_UI_QUERYSTRING_REVVING"]:
-            extra_args["semantic_ui"] = __version__
+            extra_args["semantic_ui"] = ABANDONED_VERSION
 
         return url_for(self.static_endpoint, filename=filename, **extra_args)
 
@@ -312,9 +308,9 @@ class SemanticUI(object):
         app.jinja_env.globals[
             "semantic_ui_find_resource"
         ] = semantic_ui_find_resource
-        app.jinja_env.globals["get_sui_table_titles"] = get_sui_table_titles
+        # app.jinja_env.globals["get_sui_table_titles"] = get_sui_table_titles
         app.jinja_env.globals["warn"] = warnings.warn
-        app.jinja_env.globals["raise"] = raise_helper
+        # app.jinja_env.globals["raise"] = raise_helper
         app.jinja_env.add_extension("jinja2.ext.do")
 
         if not hasattr(app, "extensions"):
