@@ -45,7 +45,6 @@ else:
         return isinstance(field, HiddenField)
 
 
-
 # =============================================================================
 # CONSTANTS
 # =============================================================================
@@ -112,7 +111,7 @@ def semantic_ui_find_resource(
 #    raise RuntimeError(message)
 
 
-#def get_sui_table_titles(data, primary_key, primary_key_title):
+# def get_sui_table_titles(data, primary_key, primary_key_title):
 #    """Detect and build the table titles tuple from ORM object.
 #
 #    .. note::
@@ -133,8 +132,8 @@ def semantic_ui_find_resource(
 # =============================================================================
 
 
-#@attr.s
-#class CDN(object):
+# @attr.s
+# class CDN(object):
 #    """Base class for CDN objects."""
 #
 #    def get_resource_url(self, filename):
@@ -326,19 +325,19 @@ class SemanticUI(object):
             WebCDN(
                 f"//cdn.jsdelivr.net/npm/semantic-ui@{SEMANTIC_UI_VERS}/dist/"
             ),
-            local,
+            local
         )
 
         respondjs = lwrap(
             WebCDN(f"//cdn.jsdelivr.net/npm/semantic-ui@{JS_VERSION}/dist/"),
-            local,
+            local
         )
 
         jquery = lwrap(
             WebCDN(
-                f"//cdnjs.cloudflare.com/ajax/libs/jquery/{JQUERY_VERSION}/",
+                f"//cdnjs.cloudflare.com/ajax/libs/jquery/{JQUERY_VERSION}/"
             ),
-            local,
+            local
         )
 
         app.extensions["semantic_ui"] = {
