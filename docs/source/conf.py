@@ -10,19 +10,30 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import datetime
+import os
+import pathlib
+import sys
+
+
+# this path is pointing to project/docs/source
+CURRENT_PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
+FLASK_SEMANTIC_UI_PATH = CURRENT_PATH.parent.parent
+
+sys.path.insert(0, str(FLASK_SEMANTIC_UI_PATH))
+
+
+import flask_semantic_ui
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'Flask-SemanticUI'
-copyright = '2021, Ferreira, Juan David'
-author = 'Ferreira, Juan David'
+project = "Flask-SemanticUI"
+copyright = f"{datetime.date.today().year}, Ferreira Juan David"
+author = "Ferreira, Juan David"
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = flask_semantic_ui.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -31,11 +42,17 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "pallets_sphinx_themes",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.coverage",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.autosummary",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -48,10 +65,30 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-# html_theme = 'alabaster'
-html_theme = 'flask'
+html_theme = "alabaster"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
+
+# Custom config
+
+# html_css_files = [
+#    'css/custom.css',
+# ]
+
+html_theme_options = {
+    "github_user": "juniors90",
+    "github_repo": "flask-SemanticUI",
+    "github_banner": True,
+    "github_button": True,
+    "github_type": "star",
+    "fixed_sidebar": True,
+}
+
+autodoc_default_options = {
+    "member-order": "bysource",
+}
+
+add_module_names = False

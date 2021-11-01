@@ -8,15 +8,17 @@
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
 # =============================================================================
-# TEST SAMPLE
+# TESTS
 # =============================================================================
 
 
-def test_sample_request(app, client):
-    @app.get("/sample")
-    def sample():
-        return "OK"
+def test_can_import_package():
+    import flask_semantic_ui  # noqa
 
-    r = client.get("/sample")
-    assert r.status_code == 200
-    assert r.data == b"OK"
+
+def test_can_initialize_app_and_extesion():
+    from flask import Flask
+    from flask_semantic_ui import SemanticUI
+
+    app = Flask(__name__)
+    SemanticUI(app)

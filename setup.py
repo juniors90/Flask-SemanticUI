@@ -3,7 +3,7 @@
 
 # This file is part of the
 #   Flask-SemanticUI Project (https://github.com/juniors90/Flask-SemanticUI/).
-# Copyright (c) 2022, Milagros Colazo
+# Copyright (c) 2022, Ferreira Juan David
 # License: MIT
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
@@ -29,7 +29,12 @@ from setuptools import setup  # noqa
 PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 
-REQUIREMENTS = ["Flask>=0.8", "dominate>=2.6.0", "visitor>=0.1.3"]
+REQUIREMENTS = [
+    "Flask>=0.8",
+    "attrs>=21.2.0",
+    "dominate>=2.6.0",
+    "visitor>=0.1.3",
+]
 
 with open(PATH / "flask_semantic_ui" / "__init__.py") as fp:
     for line in fp.readlines():

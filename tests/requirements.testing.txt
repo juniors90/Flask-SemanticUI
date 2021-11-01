@@ -1,4 +1,6 @@
 pytest>=6.2.5
 Flask>=0.8 
+attrs>=21.2.0
 dominate>=2.6.0
+requests>=2.26.0
 visitor>=0.1.3
