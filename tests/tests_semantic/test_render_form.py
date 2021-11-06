@@ -5,7 +5,8 @@ from wtforms import (
     MultipleFileField,
     PasswordField,
     StringField,
-    SubmitField)
+    SubmitField,
+)
 
 
 def test_render_form(app, client, example_form):
@@ -14,7 +15,7 @@ def test_render_form(app, client, example_form):
         form = example_form()
         return render_template_string(
             """
-                {% import "semantic_ui/wtf.html" as wtf %}
+                {% import "semantic/wtf.html" as wtf %}
                 {{ wtf.quick_form(form,
                                   form_title='Title for Shipping Information',
                                   extra_classes='inverted',
@@ -44,7 +45,7 @@ def test_form_description_for_textfield(app, client):
         form = TestForm()
         return render_template_string(
             """
-                    {% import "semantic_ui/wtf.html" as wtf %}
+                    {% import "semantic/wtf.html" as wtf %}
                     {{ wtf.quick_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
@@ -74,7 +75,7 @@ def test_render_form_enctype(app, client):
         form = SingleUploadForm()
         return render_template_string(
             """
-            {% import "semantic_ui/wtf.html" as wtf %}
+            {% import "semantic/wtf.html" as wtf %}
             {{ wtf.quick_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
@@ -87,7 +88,7 @@ def test_render_form_enctype(app, client):
         form = MultiUploadForm()
         return render_template_string(
             """
-            {% import "semantic_ui/wtf.html" as wtf %}
+            {% import "semantic/wtf.html" as wtf %}
             {{ wtf.quick_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
@@ -122,7 +123,7 @@ def test_form_render_kw_class(app, client):
         form = LoginForm()
         return render_template_string(
             """
-            {% import "semantic_ui/wtf.html" as wtf %}
+            {% import "semantic/wtf.html" as wtf %}
             {{ wtf.quick_form(form,
                 form_title='Title for Shipping Information',
                 button_map={'submit_button': 'my-class-customs'}) }}

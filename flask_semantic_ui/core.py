@@ -4,273 +4,102 @@
 # This file was part of Flask-Bootstrap and was modified under the terms of
 # its BSD License. Copyright (c) 2013, Marc Brinkmann. All rights reserved.
 #
+# This file was part of Bootstrap-Flask and was modified under the terms of
+# its MIT License. Copyright (c) 2018 Grey Li. All rights reserved.
+#
 # This file is part of the
-# Flask-SemanticUI Project (https://github.com/juniors90/Flask-SemanticUI/).
-# Copyright (c) 2022, Ferreira Juan David
+#   Flask-SemanticUI Project (
+#                 https://github.com/juniors90/Flask-SemanticUI/
+#    ).
+# Copyright (c) 2021, Ferreira Juan David
 # License: MIT
-# Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
+# Full Text:
+#    https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
-# =============================================================================
+# =====================================================================
 # DOCS
-# =============================================================================
+# =====================================================================
 
-"""Flask-SemanticUI.
-
-Implementation of SemanticUI in Flask.
-"""
-
-# =============================================================================
-# IMPORTS
-# =============================================================================
-
-import re
 import warnings
 
-import attr
-from flask import Blueprint, current_app, url_for
+from flask import current_app, Markup, Blueprint, url_for
 
-from .forms import render_form
-
-try:
+try:  # pragma: no cover
     from wtforms.fields import HiddenField
 except ImportError:
 
-    def is_hidden_field_filter(field):  # noqa
+    def is_hidden_field_filter(field):
         raise RuntimeError("WTForms is not installed.")
 
 
 else:
 
-    def is_hidden_field_filter(field):  # noqa
+    def is_hidden_field_filter(field):
         return isinstance(field, HiddenField)
 
 
-# =============================================================================
-# CONSTANTS
-# =============================================================================
-ABANDONED_VERSION = "2.4.2"
-SEMANTIC_UI_VERS = re.sub(r"^(\d+\.\d+\.\d+).*", r"\1", ABANDONED_VERSION)
-SEMANTIC_UI_LOCAL_VERSION = "2.4.0"
-JQUERY_VERSION = "3.6.0"
-JS_VERSION = "2.4.2"
-JS_LOCAL_VERSION = "2.4.1"
+CDN_BASE = "https://cdn.jsdelivr.net/npm"
 
 
-# =============================================================================
-# FUNCTIONS
-# =============================================================================
+def raise_helper(message):  # pragma: no cover
+    raise RuntimeError(message)
 
 
-def semantic_ui_find_resource(
-    filename, cdn, use_minified=None, local=True, jquery=None
-):
-    """Resource finding function, also available in templates.
+def get_table_titles(data, primary_key, primary_key_title):
+    """Detect and build the table titles tuple from ORM object.
 
-    Tries to find a resource, will force SSL depending on
-    ``SEMANTIC_UI_CDN_FORCE_SSL`` settings.
-
-    Parameters
-    ----------
-    filename: ``str``
-        File to find a URL for.
-    cdn: ``str``
-        Name of the CDN to use.
-    use_minified: ``str``
-                    If set to ``True``/``False``, use/don't use
-                          minified. If ``None``, honors
-                          ``SEMANTIC_UI_USE_MINIFIED``.
-    local: ``bool``
-            If ``True``, uses the ``local``-CDN when
-                  ``SEMANTIC_UI_SERVE_LOCAL`` is enabled. If ``False``, uses
-                  the ``static``-CDN instead.
-    jquery: ``str``
-        For the JQuery CDN.
-    Return
-    ------
-        A URL.
+    .. note::
+        Currently only support SQLAlchemy.
     """
-    config = current_app.config
-
-    if use_minified is None:
-        use_minified = config["SEMANTIC_UI_USE_MINIFIED"]
-
-    if use_minified:
-        list_file = list(filename.rsplit(".", 1))
-        filename = list_file[0] + ".min." + list_file[1]
-
-    cdns = current_app.extensions["semantic_ui"]["cdns"]
-    resource_url = cdns[cdn].get_resource_url(filename)
-
-    if resource_url.startswith("//") and config["SEMANTIC_UI_CDN_FORCE_SSL"]:
-        resource_url = "https:" + resource_url
-
-    return resource_url
+    if not data:
+        return []
+    titles = []
+    for k in data[0].__table__.columns.keys():
+        if not k.startswith("_"):
+            titles.append((k, k.replace("_", " ").title()))
+    titles[0] = (primary_key, primary_key_title)
+    return titles
 
 
-# def raise_helper(message):  # noqa
-#    raise RuntimeError(message)
-
-
-# def get_sui_table_titles(data, primary_key, primary_key_title):
-#    """Detect and build the table titles tuple from ORM object.
-#
-#    .. note::
-#        Currently only support SQLAlchemy.
-#    """
-#    if not data:
-#        return []
-#    titles = []
-#    for k in data[0].__table__.columns.keys():
-#        if not k.startswith("_"):
-#            titles.append((k, k.replace("_", " ").title()))
-#    titles[0] = (primary_key, primary_key_title)
-#    return titles
-
-
-# =============================================================================
-# CLASSES
-# =============================================================================
-
-
-# @attr.s
-# class CDN(object):
-#    """Base class for CDN objects."""
-#
-#    def get_resource_url(self, filename):
-#        """Return resource url for filename."""
-#        raise NotImplementedError
-
-
-@attr.s(repr=False)
-class StaticCDN(object):
-    """A CDN that serves content from the local application.
-
-    Attributes
-    ----------
-    static_endpoint: ``str``
-        Endpoint to use.
-    rev: ``bool``
-        If ``True``, honor ``SEMANTIC_UI_QUERYSTRING_REVVING``.
-    """
-
-    static_endpoint = attr.ib(
-        default="static", validator=attr.validators.instance_of(str)
+def link_css_with_sri(url, sri):
+    html = (
+        f'<link rel="stylesheet" href="{url}" integrity="{sri}" '
+        + 'crossorigin="anonymous">'
     )
-    rev = attr.ib(default=False, validator=attr.validators.instance_of(bool))
-
-    def get_resource_url(self, filename):  # noqa: D202
-        """Implement an inmutable dict-like to store the metadata.
-
-        Get a resource from a url depending of filename.
-
-        Parameters
-        ----------
-        filename: ``str``
-            A filename to resorce that requires.
-        Return
-        ------
-        Redirect to URL dependig od filename.
-        """
-
-        extra_args = {}
-
-        if self.rev and current_app.config["SEMANTIC_UI_QUERYSTRING_REVVING"]:
-            extra_args["semantic_ui"] = ABANDONED_VERSION
-
-        return url_for(self.static_endpoint, filename=filename, **extra_args)
+    return html
 
 
-@attr.s(repr=False)
-class WebCDN(object):
-    """Serves files from the Web.
+def simple_link_css(url):
+    return f'<link rel="stylesheet" href="{url}">'
 
-    Attributes
-    ----------
-    baseurl: ``str``
-            The baseurl. Filenames are simply appended to this URL.
+
+def scripts_with_sri(url, sri):
+    tag = (
+        f'<script src="{url}" integrity="{sri}" '
+        + 'crossorigin="anonymous"></script>'
+    )
+    return tag
+
+
+def simple_scripts_js(url):
+    return f'<script src="{url}"></script>'
+
+
+class _SemanticUI(object):
+    """Base extension class for different Semantic UI versions.
+
+    .. versionadded:: 0.0.1
     """
 
-    baseurl = attr.ib(validator=attr.validators.instance_of(str))
-
-    def get_resource_url(self, filename):
-        """Get a resource from a url depending of filename.
-
-        Parameters
-        ----------
-        filename: ``str``
-                    A filename to resorce that requires.
-        Return
-        ------
-            The baseurl. Filenames are simply appended to this URL.
-        """
-        return self.baseurl + filename
-
-
-@attr.s(repr=False)
-class ConditionalCDN(object):
-    """Serves files from one CDN or another.
-
-    Depending on whether a configuration value is set.
-
-    Attributes
-    ----------
-    confvar: ``str``
-        Configuration variable to use.
-    primary: ``str``
-        CDN to use if the configuration variable is ``True``.
-    fallback: ``str``
-        CDN to use otherwise.
-    """
-
-    confvar = attr.ib(validator=attr.validators.instance_of(str))
-    primary = attr.ib(validator=attr.validators.instance_of(StaticCDN))
-    fallback = attr.ib(validator=attr.validators.instance_of(WebCDN))
-
-    def get_resource_url(self, filename):  # noqa: D202
-        """Get a resource from a url depending of filename.
-
-        Parameters
-        ----------
-        filename: ``str``
-            A filename to resorce that requires.
-        Return
-        ------
-            The baseurl. Filenames are simply appended to this URL.
-        """
-
-        if current_app.config[self.confvar]:
-            return self.primary.get_resource_url(filename)
-
-        baseurl = self.fallback.get_resource_url(filename)
-
-        return baseurl
-
-
-class SemanticUI(object):
-    """Define the extension class to which we can apply Semantic UI.
-
-
-    .. code-block:: python
-        :caption: Initilize the extension
-        :linenos:
-
-        from flask import Flask
-        from flask_semantic_ui import SemanticUI
-        app = Flask(__name__)
-        semantic = SemanticUI(app)
-
-    .. code-block:: python
-        :caption: With the application factory
-        :linenos:
-
-        from flask import Flask
-        from flask_semantic_ui import SemanticUI
-        semantic = SemanticUI()
-
-        def create_app():
-            app = Flask(__name__)
-            semantic.init_app(app)
-    """
+    semantic_version = None
+    jquery_version = None
+    semantic_css_integrity = None
+    semantic_js_integrity = None
+    jquery_integrity = None
+    static_folder = None
+    semantic_css_filename = "semantic.min.css"
+    semantic_js_filename = "semantic.min.js"
+    jquery_filename = "jquery.min.js"
 
     def __init__(self, app=None):
         if app is not None:
@@ -278,85 +107,155 @@ class SemanticUI(object):
 
     def init_app(self, app):
         """Application factory."""
+
         # default settings
-        app.config.setdefault("SEMANTIC_UI_USE_MINIFIED", True)
-        app.config.setdefault("SEMANTIC_UI_CDN_FORCE_SSL", False)
-
-        app.config.setdefault("SEMANTIC_UI_QUERYSTRING_REVVING", True)
-        app.config.setdefault("SEMANTIC_UI_SERVE_LOCAL", False)
-
-        app.config.setdefault("SEMANTIC_UI_LOCAL_SUBDOMAIN", None)
+        app.config.setdefault("SEMANTIC_SERVE_LOCAL", False)
+        app.config.setdefault("SEMANTIC_BUTTON_STYLE", "primary")
+        app.config.setdefault("SEMANTIC_BUTTON_SIZE", None)
+        app.config.setdefault("SEMANTIC_ICON_SIZE", "1em")
+        app.config.setdefault("SEMANTIC_ICON_COLOR", None)
+        app.config.setdefault(
+            "SEMANTIC_MSG_CATEGORY", None
+        )  # change prymeary by None
+        app.config.setdefault("SEMANTIC_TABLE_VIEW_TITLE", "View")
+        app.config.setdefault("SEMANTIC_TABLE_EDIT_TITLE", "Edit")
+        app.config.setdefault("SEMANTIC_TABLE_DELETE_TITLE", "Delete")
+        app.config.setdefault("SEMANTIC_TABLE_NEW_TITLE", "New")
+        if not hasattr(app, "extensions"):
+            app.extensions = {}
+        app.extensions["semantic"] = self
 
         blueprint = Blueprint(
-            "semantic_ui",
+            "semantic",
             __name__,
+            static_folder=f"static/{self.static_folder}",
+            static_url_path=f"{app.static_url_path}",
             template_folder="templates",
-            static_folder="static",
-            static_url_path=app.static_url_path + "/semantic_ui",
-            subdomain=app.config["SEMANTIC_UI_LOCAL_SUBDOMAIN"],
         )
-
-        # add the form rendering template filter
-        blueprint.add_app_template_filter(render_form)
 
         app.register_blueprint(blueprint)
 
+        app.jinja_env.globals["semantic"] = self
         app.jinja_env.globals[
             "semantic_ui_is_hidden_field"
         ] = is_hidden_field_filter
-        app.jinja_env.globals[
-            "semantic_ui_find_resource"
-        ] = semantic_ui_find_resource
-        # app.jinja_env.globals["get_sui_table_titles"] = get_sui_table_titles
+        app.jinja_env.globals["get_table_titles"] = get_table_titles
         app.jinja_env.globals["warn"] = warnings.warn
-        # app.jinja_env.globals["raise"] = raise_helper
+        app.jinja_env.globals["raise"] = raise_helper
         app.jinja_env.add_extension("jinja2.ext.do")
 
-        if not hasattr(app, "extensions"):
-            app.extensions = {}
+    def load_css(self, s_version=None, semantic_sri=None):
+        """Load Semantic's css resources with given version.
 
-        local = StaticCDN("semantic_ui.static", rev=True)
-        static = StaticCDN()
+        Parameters
+        ----------
+        s_version: ``str``
+            The version of Semantic UI.
+        semantic_sri: ``str``
+            Subresource Integrity.
+        Return
+        ------
+            Semantic-ui CDN File.
+        """
 
-        def lwrap(cdn, primary=static):
-            return ConditionalCDN("SEMANTIC_UI_SERVE_LOCAL", primary, cdn)
+        serve_local = current_app.config["SEMANTIC_SERVE_LOCAL"]
+        s_version = self.semantic_version if s_version is None else s_version
+        semantic_sri = self._get_sri("semantic_css", s_version, semantic_sri)
 
-        semantic_ui = lwrap(
-            WebCDN(
-                f"//cdn.jsdelivr.net/npm/semantic-ui@{SEMANTIC_UI_VERS}/dist/"
-            ),
-            local
-        )
+        if serve_local:
+            base_path = "css"
+            url = url_for(
+                "semantic.static",
+                filename=f"{base_path}/{self.semantic_css_filename}",
+            )
+        else:
+            base_path = CDN_BASE + f"/semantic-ui@{s_version}/dist/"
+            url = base_path + self.semantic_css_filename
 
-        respondjs = lwrap(
-            WebCDN(f"//cdn.jsdelivr.net/npm/semantic-ui@{JS_VERSION}/dist/"),
-            local
-        )
+        if semantic_sri:
+            css = link_css_with_sri(url, semantic_sri)
+        else:
+            css = f'<link rel="stylesheet" type="text/css" href="{url}">'
 
-        jquery = lwrap(
-            WebCDN(
-                f"//cdnjs.cloudflare.com/ajax/libs/jquery/{JQUERY_VERSION}/"
-            ),
-            local
-        )
+        return Markup(css)
 
-        app.extensions["semantic_ui"] = {
-            "cdns": {
-                "local": local,
-                "static": static,
-                "semantic_ui": semantic_ui,
-                "jquery": jquery,
-                "respond.js": respondjs,
-            },
+    def _get_js_script(self, version, name, sri):
+        """Get <script> tag for JavaScipt resources."""
+        serve_local = current_app.config["SEMANTIC_SERVE_LOCAL"]
+        paths = {
+            "semantic-ui": f"{self.semantic_js_filename}",
+            "jquery": f"{self.jquery_filename}",
         }
 
-        # setup support for flask-nav
-        renderers = app.extensions.setdefault("nav_renderers", {})
-        renderer_name = (__name__ + ".nav", "SemanticUIRenderer")
-        renderers["semantic_ui"] = renderer_name
+        if serve_local:
+            base_path = "js/semantic"
+            url = url_for(
+                "semantic.static", filename=f"{base_path}/{paths[name]}"
+            )
+        else:
+            url = CDN_BASE + f"/{name}@{version}/dist/{paths[name]}"
 
-        # make semantic ui the default renderer
-        renderers[None] = renderer_name
+        if sri:
+            script_html = scripts_with_sri(url, sri)
+        else:
+            script_html = simple_scripts_js(url)
 
+        return script_html
 
-# 33-35, 97, 109, 118-125, 139, 173-178, 240, 314
+    def _get_sri(self, name, version, sri):
+        serve_local = current_app.config["SEMANTIC_SERVE_LOCAL"]
+        sris = {
+            "semantic_css": self.semantic_css_integrity,
+            "semantic_js": self.semantic_js_integrity,
+            "jquery": self.jquery_integrity,
+        }
+        versions = {
+            "semantic_css": self.semantic_version,
+            "semantic_js": self.semantic_version,
+            "jquery": self.jquery_version,
+        }
+
+        if sri is not None:
+            return sri
+        if version == versions[name] and serve_local is False:
+            return sris[name]
+        else:
+            return None
+
+    def load_js(
+        self,
+        version=None,
+        jq_version=None,  # noqa: C901
+        semantic_sri=None,
+        jquery_sri=None,
+    ):
+        """Load Seomantic UI and other resources with given version.
+
+        Parameter
+        ---------
+        version: ``str``
+            The version of Semantic UI.
+        jq_version: ``str``
+            The version of jQuery (for Semantic UI).
+        semantic_sri: ``str``
+            Subresource Integrity for Semantic UI..
+        jquery_sri: ``str``
+            Subresource Integrity for jQuery.
+        Return
+        ------
+            Semantic-ui CDN File.
+        """
+
+        version = self.semantic_version if version is None else version
+        jq_version = self.jquery_version if jq_version is None else jq_version
+
+        sui_sri = self._get_sri("semantic_js", version, semantic_sri)
+        sui_js = self._get_js_script(version, "semantic-ui", sui_sri)
+
+        jquery_sri = self._get_sri("jquery", jq_version, jquery_sri)
+        jquery = self._get_js_script(jq_version, "jquery", jquery_sri)
+
+        return Markup(
+            f"""{jquery}
+            {sui_js}"""
+        )

@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 sample_app/
-
+testscopia/
 .vscode/

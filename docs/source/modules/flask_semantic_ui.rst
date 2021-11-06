@@ -12,18 +12,10 @@ flask\_semantic\_ui.core module
    :undoc-members:
    :show-inheritance:
 
-flask\_semantic\_ui.forms module
---------------------------------
+flask\_semantic\_ui.semantic\_ui module
+---------------------------------------
 
-.. automodule:: flask_semantic_ui.forms
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-flask\_semantic\_ui.nav module
-------------------------------
-
-.. automodule:: flask_semantic_ui.nav
+.. automodule:: flask_semantic_ui.semantic_ui
    :members:
    :undoc-members:
    :show-inheritance:

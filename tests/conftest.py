@@ -1,6 +1,5 @@
-import re
-
 import flask
+from flask import render_template_string
 from flask_wtf import FlaskForm
 from wtforms import (
     BooleanField,
@@ -14,8 +13,6 @@ from wtforms import (
 from wtforms.validators import DataRequired, Length
 import pytest as pt
 import typing as t
-
-import flask_semantic_ui
 
 
 class ExampleForm(FlaskForm):
@@ -46,53 +43,33 @@ if t.TYPE_CHECKING:
 
 
 @pt.fixture
-def app() -> "flask.Flask":
-    from flask_semantic_ui import SemanticUI
+def example_form():
+    return ExampleForm
 
+
+@pt.fixture(autouse=True)
+def app() -> "flask.Flask":
     app = flask.Flask(__name__)
-    SemanticUI(app)
     app.secret_key = "for test"
     app.testing = True
-    return app
+
+    @app.route("/")
+    def index():
+        return render_template_string(
+            "{{ semantic.load_css() }}{{ semantic.load_js() }}"
+        )
+
+    yield app
+    # return app
 
 
 @pt.fixture
 def client(app: "flask.Flask") -> "FlaskClient":
-    return app.test_client()
+    context = app.test_request_context()
+    context.push()
 
+    with app.test_client() as client:
+        yield client
 
-@pt.fixture
-def cdn_suiv():
-    semantic_ui_version = re.search(
-        r"(\d+\.\d+\.\d+)", str(flask_semantic_ui.SEMANTIC_UI_VERS)
-    ).group(1)
-    return "Semantic UI - " + semantic_ui_version
-
-
-@pt.fixture
-def cdn_jqv():
-    jquery_version = re.search(
-        r"(\d+\.\d+\.\d+)", str(flask_semantic_ui.JQUERY_VERSION)
-    ).group(1)
-    return "jQuery v" + jquery_version
-
-
-@pt.fixture
-def local_suiv():
-    semantic_ui_version = re.search(
-        r"(\d+\.\d+\.\d+)", str(flask_semantic_ui.SEMANTIC_UI_LOCAL_VERSION)
-    ).group(1)
-    return "Semantic UI - " + semantic_ui_version
-
-
-@pt.fixture
-def local_jsv():
-    js_version = re.search(
-        r"(\d+\.\d+\.\d+)", str(flask_semantic_ui.JS_LOCAL_VERSION)
-    ).group(1)
-    return "Semantic UI - " + js_version
-
-
-@pt.fixture
-def example_form():
-    return ExampleForm
+    context.pop()
+    # return app.test_client()

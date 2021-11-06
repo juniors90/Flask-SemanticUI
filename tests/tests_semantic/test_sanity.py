@@ -22,3 +22,12 @@ def test_can_initialize_app_and_extesion():
 
     app = Flask(__name__)
     SemanticUI(app)
+
+
+def test_can_initialize_app_and_extesion_with_factory_func():
+    from flask import Flask
+    from flask_semantic_ui import SemanticUI
+
+    app = Flask(__name__)
+    semantic = SemanticUI()
+    semantic.init_app(app)

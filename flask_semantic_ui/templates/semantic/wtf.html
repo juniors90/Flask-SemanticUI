@@ -61,10 +61,8 @@
     {%- elif field.type == 'SubmitField' -%}
     {# deal with jinja scoping issues? #}
     {% set field_kwargs = kwargs %}
-
     {# note: same issue as above - should check widget, not field type #}
-    
-      {{field(class='ui submit button %s' % button_map.get(field.name, 'default'), **field_kwargs)}}
+    {{field(class='ui submit button %s' % button_map.get(field.name, 'default'), **field_kwargs)}}
     
   
     {%- elif field.type == 'FormField' -%}
