@@ -26,13 +26,3 @@ jobs:
         pip install tox tox-gh-actions
     - name: Test with tox
       run: tox -r
-  coverage:
-    name: coverage
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - run: python -m pip install --upgrade pip wheel
-      - run: pip install tox codecov
-      - run: tox -e covarage
-      - run: codecov
