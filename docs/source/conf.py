@@ -18,12 +18,12 @@ import sys
 
 # this path is pointing to project/docs/source
 CURRENT_PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
-FLASK_SEMANTIC_UI_PATH = CURRENT_PATH.parent.parent
+FLASK_SEMANTIC_PATH = CURRENT_PATH.parent.parent
 
-sys.path.insert(0, str(FLASK_SEMANTIC_UI_PATH))
+sys.path.insert(0, str(FLASK_SEMANTIC_PATH))
 
 
-import flask_semantic_ui
+import flask_semantic
 
 
 # -- Project information -----------------------------------------------------
@@ -33,7 +33,7 @@ copyright = f"{datetime.date.today().year}, Ferreira Juan David"
 author = "Ferreira, Juan David"
 
 # The full version, including alpha/beta/rc tags
-release = flask_semantic_ui.__version__
+release = flask_semantic.__version__
 
 
 # -- General configuration ---------------------------------------------------

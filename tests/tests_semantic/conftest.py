@@ -1,8 +1,23 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# This file was part of Flask-Bootstrap and was modified under the terms of
+# its BSD License. Copyright (c) 2013, Marc Brinkmann. All rights reserved.
+#
+# This file was part of Bootstrap-Flask and was modified under the terms of
+# its MIT License. Copyright (c) 2018 Grey Li. All rights reserved.
+#
+# This file is part of the
+# Flask-SemanticUI Project (https://github.com/juniors90/Flask-SemanticUI/).
+# Copyright (c) 2021, Ferreira Juan David
+# License: MIT
+# Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
+
 import re
 
 import pytest as pt
 
-from flask_semantic_ui import SemanticUI
+from flask_semantic import SemanticUI
 
 
 @pt.fixture(autouse=True)
@@ -12,10 +27,10 @@ def semantic(app):
 
 @pt.fixture
 def cdn_suiv():
-    semantic_ui_version = re.search(
+    semantic_version = re.search(
         r"(\d+\.\d+\.\d+)", str(SemanticUI.semantic_version)
     ).group(1)
-    return "Semantic UI - " + semantic_ui_version
+    return "Semantic UI - " + semantic_version
 
 
 @pt.fixture
@@ -28,10 +43,10 @@ def cdn_jqv():
 
 @pt.fixture
 def local_suiv():
-    semantic_ui_version = re.search(
+    semantic_version = re.search(
         r"(\d+\.\d+\.\d+)", str(SemanticUI.semantic_version)
     ).group(1)
-    return "Semantic UI - " + semantic_ui_version
+    return "Semantic UI - " + semantic_version
 
 
 @pt.fixture

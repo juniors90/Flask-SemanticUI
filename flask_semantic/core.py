@@ -112,11 +112,11 @@ class _SemanticUI(object):
         app.config.setdefault("SEMANTIC_SERVE_LOCAL", False)
         app.config.setdefault("SEMANTIC_BUTTON_STYLE", "primary")
         app.config.setdefault("SEMANTIC_BUTTON_SIZE", None)
-        app.config.setdefault("SEMANTIC_ICON_SIZE", "1em")
+        app.config.setdefault("SEMANTIC_ICON_TYPE", None)
         app.config.setdefault("SEMANTIC_ICON_COLOR", None)
         app.config.setdefault(
             "SEMANTIC_MSG_CATEGORY", None
-        )  # change prymeary by None
+        )  # change primary by None
         app.config.setdefault("SEMANTIC_TABLE_VIEW_TITLE", "View")
         app.config.setdefault("SEMANTIC_TABLE_EDIT_TITLE", "Edit")
         app.config.setdefault("SEMANTIC_TABLE_DELETE_TITLE", "Delete")
@@ -137,7 +137,7 @@ class _SemanticUI(object):
 
         app.jinja_env.globals["semantic"] = self
         app.jinja_env.globals[
-            "semantic_ui_is_hidden_field"
+            "semantic_is_hidden_field"
         ] = is_hidden_field_filter
         app.jinja_env.globals["get_table_titles"] = get_table_titles
         app.jinja_env.globals["warn"] = warnings.warn
@@ -219,8 +219,7 @@ class _SemanticUI(object):
             return sri
         if version == versions[name] and serve_local is False:
             return sris[name]
-        else:
-            return None
+        return None
 
     def load_js(
         self,

@@ -30,13 +30,10 @@ PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 
 REQUIREMENTS = [
-    "Flask>=0.8",
-    "attrs>=21.2.0",
-    "dominate>=2.6.0",
-    "visitor>=0.1.3",
+    "Flask>=2.0.2"
 ]
 
-with open(PATH / "flask_semantic_ui" / "__init__.py") as fp:
+with open(PATH / "flask_semantic" / "__init__.py") as fp:
     for line in fp.readlines():
         if line.startswith("__version__ = "):
             VERSION = line.split("=", 1)[-1].replace('"', "").strip()
@@ -60,7 +57,7 @@ setup(
     author="Ferreira Juan David",
     author_email="juandavid9a0@gmail.com",
     url="https://github.com/juniors90/Flask-SemanticUI",
-    packages=["flask_semantic_ui"],
+    packages=["flask_semantic"],
     include_package_data=True,
     platforms="any",
     license="The MIT License",

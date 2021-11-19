@@ -8,19 +8,19 @@
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
 """
-def test_semantic_ui_find_resource(app):
-    from flask_semantic_ui import semantic_ui_find_resource
+def test_semantic_find_resource(app):
+    from flask_semantic import semantic_find_resource
 
     with app.app_context():
-        url = semantic_ui_find_resource("semantic.js", cdn="respond.js")
+        url = semantic_find_resource("semantic.js", cdn="respond.js")
     c = "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"
     with app.app_context():
-        app.config["SEMANTIC_UI_CDN_FORCE_SSL"] = True
-        url1 = semantic_ui_find_resource("semantic.js", cdn="respond.js")
+        app.config["SEMANTIC_CDN_FORCE_SSL"] = True
+        url1 = semantic_find_resource("semantic.js", cdn="respond.js")
     c1 = "https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"
     with app.app_context():
-        app.config["SEMANTIC_UI_CDN_FORCE_SSL"] = True
-        url2 = semantic_ui_find_resource(
+        app.config["SEMANTIC_CDN_FORCE_SSL"] = True
+        url2 = semantic_find_resource(
             'jquery.js', cdn='jquery', use_minified=True
         )
     c2 = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
@@ -31,8 +31,8 @@ def test_semantic_ui_find_resource(app):
 
 
 """
-def test_semantic_ui_find_local_resource(app):
-    from flask_semantic_ui import StaticCDN
+def test_semantic_find_local_resource(app):
+    from flask_semantic import StaticCDN
     with app.app_context():
         app.config['SERVER_NAME'] = 'localhost'
         url = StaticCDN().get_resource_url(filename='css/semantic.css')

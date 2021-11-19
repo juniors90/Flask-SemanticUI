@@ -14,10 +14,7 @@
     {%- endblock metas %}
 
     {%- block styles %}
-    <!-- Sematic UI -->
-    
-    <link rel="stylesheet" href="{{semantic_ui_find_resource('semantic.css', cdn='semantic_ui')}}">
-    
+    <!-- Sematic UI css-->
     {%- endblock styles %}
     {%- endblock head %}
   </head>
@@ -29,15 +26,19 @@
     {%- endblock content %}
 
     {% block scripts %}
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" src="{{semantic_ui_find_resource('jquery.js', cdn='jquery',jquery='True')}}" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{{semantic_ui_find_resource('semantic.js', cdn='respond.js')}}"></script>
-    <script>
-    function dismissibleItem(){
-      $('#alert .message').hide();
-    }
-    </script>
+    <!-- Sematic UI js-->  
     {%- endblock scripts %}
+    <script>
+    window.onload = function(){
+        let elements= document.getElementsByClassName('close');
+        for(let el of elements) {
+            el.addEventListener("click", dismissibleItem);
+        };
+    };
+    function dismissibleItem(){
+      document.getElementById('alert').style.display='none';
+    };
+    </script>
     {%- endblock body %}
   </body>
 {%- endblock html %}

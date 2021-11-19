@@ -1,0 +1,78 @@
+{#  This file was part of Flask-Bootstrap and was modified under the terms of
+ its BSD License. Copyright (c) 2013, Marc Brinkmann. All rights reserved. #}
+{% from 'semantic/utils.html' import arg_url_for %}
+
+{% macro render_sui_pager(pagination,
+                      fragment='',
+                      prev=('<span aria-hidden="true">&larr;</span> Previous')|safe,
+                      next=('Next <span aria-hidden="true">&rarr;</span>')|safe,
+                      align='') -%}
+
+<div class="ui pagination menu">
+    <a class="item"
+        href="{{ url_for(request.endpoint, page=pagination.prev_num, **kwargs) + fragment if pagination.has_prev else '#' }}">
+        {{ prev }}
+    </a>
+    {% if not (pagination.has_next and pagination.has_prev) %}
+    <div class="disabled item">
+    ...
+    </div>
+    {% endif %}
+    <a class="item"
+       href="{{ url_for(request.endpoint, page=pagination.next_num, **kwargs) + fragment if pagination.has_next else '#' }}">
+        {{ next }}
+    </a>
+</div>
+{%- endmacro %}
+
+{% macro render_pagination(pagination,
+                           endpoint=None,
+                           prev='left chevron',
+                           next='right chevron',
+                           size=None,
+                           ellipses='…',
+                           args={},
+                           fragment='',
+                           align=''
+                           )-%}
+    {% if fragment != '' and not fragment.startswith('#') %}
+        {% set fragment = '#' + fragment %}
+    {% endif %}
+    {% with url_args = {} %}
+        {%- do url_args.update(request.view_args if not endpoint else {}),
+       url_args.update(request.args if not endpoint else {}),
+       url_args.update(args) -%}
+        {% with endpoint = endpoint or request.endpoint %}
+            <div class="ui pagination menu">
+                
+                    {# prev and next are only show if a symbol has been passed. #}
+                    {% if prev != None -%}
+                        <a class="item {% if not pagination.has_prev %} disabled{% endif %}" href="{{ arg_url_for(endpoint, url_args, page=pagination.prev_num) if pagination.has_prev else '#' }}{{ fragment }}">
+                        <i class="{{ prev }} icon"></i>
+                        </a>
+                    {%- endif -%}
+
+                    {%- for page in pagination.iter_pages() %}
+                        {% if page %}
+                            {% if page != pagination.page %}
+                                <a class="item" href="{{ arg_url_for(endpoint, url_args, page=page) }}{{ fragment }}">{{ page }}</a>
+                            {% else %}
+                                <a class="active item" href="#">{{ page }}
+                                </a>
+                            {% endif %}
+                        {% elif ellipses != None %}
+                            <div class="disabled item">
+                                {{ ellipses }}
+                            </div>
+                        {% endif %}
+                    {%- endfor %}
+
+                    {% if next != None -%}
+                        <a class="{% if not pagination.has_next %}disabled{% endif %} item"
+                           href="{{ arg_url_for(endpoint, url_args, page=pagination.next_num) if pagination.has_next else '#' }}{{ fragment }}"><i class="{{ next }} icon"></i>
+                        </a>
+                    {%- endif -%}
+            </div>
+        {% endwith %}
+    {% endwith %}
+{% endmacro %}

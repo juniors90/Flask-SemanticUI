@@ -1,17 +1,17 @@
 include LICENSE
 include README.md
-recursive-include flask_semantic_ui *.css
-recursive-include flask_semantic_ui *.eot
-recursive-include flask_semantic_ui *.html
-recursive-include flask_semantic_ui *.js
-recursive-include flask_semantic_ui *.map
-recursive-include flask_semantic_ui *.otf
-recursive-include flask_semantic_ui *.png
-recursive-include flask_semantic_ui *.py
-recursive-include flask_semantic_ui *.svg
-recursive-include flask_semantic_ui *.ttf
-recursive-include flask_semantic_ui *.woff
-recursive-include flask_semantic_ui *.woff2
+recursive-include flask_semantic *.css
+recursive-include flask_semantic *.eot
+recursive-include flask_semantic *.html
+recursive-include flask_semantic *.js
+recursive-include flask_semantic *.map
+recursive-include flask_semantic *.otf
+recursive-include flask_semantic *.png
+recursive-include flask_semantic *.py
+recursive-include flask_semantic *.svg
+recursive-include flask_semantic *.ttf
+recursive-include flask_semantic *.woff
+recursive-include flask_semantic *.woff2
 
 
 exclude tox.ini

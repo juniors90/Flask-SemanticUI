@@ -26,12 +26,42 @@ Implementation of SemanticUI in Flask.
 # META
 # =============================================================================
 
-__version__ = "0.0.1"
+from .core import _SemanticUI
 
-# =============================================================================
-# IMPORTS
-# =============================================================================
 
-from .core import *  # noqa
+class SemanticUI(_SemanticUI):
+    """Base class for palies the SemanticUI framework.
 
-from .semantic_ui import *  # noqa
+    Initilize the extension::
+
+        from flask import Flask
+        from flask_semantic import SemantiUI
+
+        app = Flask(__name__)
+        semantic = SemanticUI(app)
+
+
+    Or with the application factory::
+
+
+        from flask import Flask
+        from flask_semantic import SemanticUI
+
+        Semantic = SemanticUI()
+
+        def create_app():
+            app = Flask(__name__)
+            semantic.init_app(app)
+
+    """
+
+    jquery_version = "3.1.1"
+    semantic_version = "2.4.2"
+    semantic_css_integrity = (
+        "sha256-UXesixbeLkB/UYxVTzuj/gg3+LMzgwAmg3zD+C4ZASQ="
+    )
+    semantic_js_integrity = (
+        "sha256-CgSoWC9w5wNmI1aN8dIMK+6DPelUEtvDr+Bc2m/0Nx8="
+    )
+    jquery_integrity = "sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    static_folder = "semantic"

@@ -4,8 +4,8 @@
 {% macro form_errors(form, hiddens=True) %}
   {%- if form.errors %}
     {%- for fieldname, errors in form.errors.items() %}
-      {%- if semantic_ui_is_hidden_field(form[fieldname]) and hiddens or
-             not semantic_ui_is_hidden_field(form[fieldname]) and hiddens != 'only' %}
+      {%- if semantic_is_hidden_field(form[fieldname]) and hiddens or
+             not semantic_is_hidden_field(form[fieldname]) and hiddens != 'only' %}
           <div class="ui error message">
             <div class="header">Action Forbidden</div>
             {%- for error in errors %}
@@ -73,7 +73,7 @@
     <fieldset class="field">
       <legend>{{field.label}}</legend>
       {%- for subfield in field %}
-        {% if not semantic_ui_is_hidden_field(subfield) -%}
+        {% if not semantic_is_hidden_field(subfield) -%}
           {{ form_field(subfield,
                       form_type=form_type,
                       horizontal_columns=horizontal_columns,
@@ -209,7 +209,7 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
   {{ form_errors(form, hiddens='only') }}
 
   {%- for field in form %}
-    {% if not semantic_ui_is_hidden_field(field) -%}
+    {% if not semantic_is_hidden_field(field) -%}
       {{ form_field(field,
                     form_type=form_type,
                     horizontal_columns=horizontal_columns,

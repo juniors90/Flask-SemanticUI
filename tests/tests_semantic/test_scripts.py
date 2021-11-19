@@ -1,4 +1,19 @@
-from flask_semantic_ui import (
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# This file was part of Flask-Bootstrap and was modified under the terms of
+# its BSD License. Copyright (c) 2013, Marc Brinkmann. All rights reserved.
+#
+# This file was part of Bootstrap-Flask and was modified under the terms of
+# its MIT License. Copyright (c) 2018 Grey Li. All rights reserved.
+#
+# This file is part of the
+# Flask-SemanticUI Project (https://github.com/juniors90/Flask-SemanticUI/).
+# Copyright (c) 2021, Ferreira Juan David
+# License: MIT
+# Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
+
+from flask_semantic import (
     simple_link_css,
     link_css_with_sri,
     simple_scripts_js,
@@ -48,7 +63,7 @@ def test_simple_link_css_js():
     assert js_html_sri == scripts_with_sri(js_url, js_sri)
 
 
-def test_semantic_ui_find_local_resource(app, semantic):
+def test_semantic_find_local_resource(app, semantic):
     with app.app_context(), app.test_request_context():
         app.config["SEMANTIC_SERVE_LOCAL"] = True
         app.config["SERVER_NAME"] = "localhost"
@@ -65,7 +80,7 @@ def test_semantic_ui_find_local_resource(app, semantic):
     assert jquery in url_js_and_jquery
 
 
-def test_semantic_ui_find_cdn_resource(app, semantic):
+def test_semantic_find_cdn_resource(app, semantic):
     with app.app_context(), app.test_request_context():
         app.config["SEMANTIC_SERVE_LOCAL"] = False
         url_css = semantic.load_css()
