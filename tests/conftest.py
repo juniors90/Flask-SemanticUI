@@ -53,8 +53,21 @@ class ExampleForm(FlaskForm):
     submit_button = SubmitField("Submit Form")
 
 
+class HelloForm(FlaskForm):
+    name = StringField('Name')
+    username = StringField('Username', validators=[DataRequired(), Length(1, 20)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(8, 150)])
+    remember = BooleanField('Remember me')
+    hidden = HiddenField()
+    submit = SubmitField()
+
+
 if t.TYPE_CHECKING:
     from flask.testing import FlaskClient
+
+@pt.fixture
+def hello_form():
+    return HelloForm
 
 
 @pt.fixture
@@ -65,10 +78,11 @@ def example_form():
 @pt.fixture(autouse=True)
 def app() -> "flask.Flask":
     app = flask.Flask(__name__)
+    app.testing = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.secret_key = 'for test'
-    app.testing = True
+    app.debug = False
 
     @app.route("/")
     def index():
@@ -77,7 +91,6 @@ def app() -> "flask.Flask":
         )
 
     yield app
-    # return app
 
 
 @pt.fixture
@@ -89,4 +102,3 @@ def client(app: "flask.Flask") -> "FlaskClient":
         yield client
 
     context.pop()
-    # return app.test_client()

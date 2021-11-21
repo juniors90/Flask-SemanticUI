@@ -18,16 +18,26 @@
 {%- endmacro %}
 
 {% macro _hz_form_wrap(horizontal_columns, form_type, add_group=False, required=False, extra_classes=None) %}
-  {% if add_group %} <div class="ui container {% if required %} required {% endif %}"> {% endif %}
-    {{caller()}}
-  {% if add_group %} </div> {% endif %}
+{% if form_type == "inline" %}
+    {% if add_group %}
+        
+    {% endif %}
+
+{% endif %}
+{{ caller() }}
+{% if form_type == "inline" %}
+    {% if add_group %}
+        
+    {% endif %}
+
+{% endif %}
 {% endmacro %}
 
 {% macro form_field(field,
                     form_type="basic",
                     horizontal_columns=('sixteen', 'sixteen', 'sixteen'),
                     button_map={}) %}
-  {# this is a workaround hack for the more straightforward-code of just passing required=required parameter.
+    {# this is a workaround hack for the more straightforward-code of just passing required=required parameter.
   older versions of wtforms do not have the necessary fix for required=False attributes, but will also not set the required flag in the first place. we skirt the issue using the code below #}
   {% if field.flags.required and not required in kwargs %}
     {% set kwargs = dict(required=True, **kwargs) %}
@@ -46,7 +56,7 @@
     {# note: A cleaner solution would be rendering depending on the widget,
     this is just a hack for now, until I can think of something better #}
     {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required,extra_classes=None) %}
-      <div class="grouped {% if extra_classes %} {{ extra_classes }}{% endif %} fields">
+      <div class="grouped{% if extra_classes %} {{ extra_classes }}{% endif %} fields">
         {{field.label|safe}}
         {% for item in field -%}
           <div class="field">
@@ -60,12 +70,16 @@
     {% endcall %}
     {%- elif field.type == 'SubmitField' -%}
     {# deal with jinja scoping issues? #}
-    {% set field_kwargs = kwargs %}
-    {# note: same issue as above - should check widget, not field type #}
-    {{field(class='ui submit button %s' % button_map.get(field.name, 'default'), **field_kwargs)}}
-    
-  
-    {%- elif field.type == 'FormField' -%}
+        {% set field_kwargs = kwargs %}
+        {# note: same issue as above - should check widget, not field type #}
+        {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required) %}
+            {% set default_button_style = button_style or config.SEMANTIC_BUTTON_STYLE %}
+            {% set default_button_size = button_size or config.SEMANTIC_BUTTON_SIZE %}
+            {{ field(class='ui submit button %s %s %s' % (button_map.get(field.name, default_button_style), default_button_size, extra_classes), **field_kwargs) }}
+        {% endcall %}
+    {%- elif field.type in ['CSRFTokenField', 'HiddenField'] -%}
+        {{ field()|safe }}
+    {%- elif field.type in ['FormField', 'FieldList'] -%}
     {# note: FormFields are tricky to get right and complex setups requiring
     these are probably beyond the scope of what this macro tries to do.
     the code below ensures that things don't break horribly if we run into
@@ -82,25 +96,21 @@
     {%- endfor %}
     </fieldset>
   {% else -%}
-  <div class="{% if form_type == "inline" %} ui inline fields {% else%} field  {% endif -%} {%- if field.flags.required %} required {% endif -%}">
+  <div class="{% if form_type == "inline" %}inline fields{% else%}field{% endif -%}{%- if field.flags.required %} required{% endif -%}">
       {%- if form_type == "inline" %}
-        <div class="field {{horizontal_columns[0]}} wide mobile {{horizontal_columns[1]}} wide tablet {{horizontal_columns[2]}} wide computer column">
           {{field.label|safe}}
           {% if field.type == 'FileField' %}
-            {{field(**kwargs)|safe}}
+            {{field(class="%s" % extra_classes, **kwargs)|safe}}
           {% else %}
-            {{field(**kwargs)|safe}}
+            {{field(class="%s" % extra_classes, **kwargs)|safe}}
           {% endif %}
-        </div>
       {% elif form_type == "horizontal" %}
-        
           {{field.label|safe}}
           {% if field.type == 'FileField' %}
             {{field(**kwargs)|safe}}
           {% else %}
             {{field(class="ui field", **kwargs)|safe}}
           {% endif %}
-        
         {%- if field.errors %}
           {%- for error in field.errors %}
             {% call _hz_form_wrap(horizontal_columns, form_type, required=required, extra_classes=None) %}
@@ -115,14 +125,12 @@
           {% endcall %}
         {%- endif %}
       {%- else -%}
-        <div class="field {{horizontal_columns[0]}} wide mobile {{horizontal_columns[1]}} wide tablet {{horizontal_columns[2]}} wide computer column">
           {{field.label|safe}}
           {% if field.type == 'FileField' %}
             {{field(**kwargs)|safe}}
           {% else %}
             {{field(**kwargs)|safe}}
           {% endif %}
-        </div>
         {%- if field.errors %}
           {%- for error in field.errors %}
             <div class="ui error message">

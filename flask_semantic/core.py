@@ -111,7 +111,9 @@ class _SemanticUI(object):
         # default settings
         app.config.setdefault("SEMANTIC_SERVE_LOCAL", False)
         app.config.setdefault("SEMANTIC_BUTTON_STYLE", "primary")
+        app.config.setdefault("SEMANTIC_BUTTON_SUBMIT_STYLE", "default")
         app.config.setdefault("SEMANTIC_BUTTON_SIZE", None)
+        app.config.setdefault("SEMANTIC_BUTTON_SUBMIT_SIZE", None)
         app.config.setdefault("SEMANTIC_ICON_TYPE", None)
         app.config.setdefault("SEMANTIC_ICON_COLOR", None)
         app.config.setdefault(
@@ -176,7 +178,6 @@ class _SemanticUI(object):
             css = link_css_with_sri(url, semantic_sri)
         else:
             css = f'<link rel="stylesheet" type="text/css" href="{url}">'
-
         return Markup(css)
 
     def _get_js_script(self, version, name, sri):
@@ -199,16 +200,17 @@ class _SemanticUI(object):
             script_html = scripts_with_sri(url, sri)
         else:
             script_html = simple_scripts_js(url)
-
         return script_html
 
     def _get_sri(self, name, version, sri):
         serve_local = current_app.config["SEMANTIC_SERVE_LOCAL"]
+
         sris = {
             "semantic_css": self.semantic_css_integrity,
             "semantic_js": self.semantic_js_integrity,
             "jquery": self.jquery_integrity,
         }
+
         versions = {
             "semantic_css": self.semantic_version,
             "semantic_js": self.semantic_version,
@@ -247,13 +249,10 @@ class _SemanticUI(object):
 
         version = self.semantic_version if version is None else version
         jq_version = self.jquery_version if jq_version is None else jq_version
-
         sui_sri = self._get_sri("semantic_js", version, semantic_sri)
         sui_js = self._get_js_script(version, "semantic-ui", sui_sri)
-
         jquery_sri = self._get_sri("jquery", jq_version, jquery_sri)
         jquery = self._get_js_script(jq_version, "jquery", jquery_sri)
-
         return Markup(
             f"""{jquery}
             {sui_js}"""

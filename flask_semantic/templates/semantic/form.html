@@ -1,5 +1,8 @@
 {#  This file was part of Flask-Bootstrap and was modified under the terms of
- its BSD License. Copyright (c) 2013, Marc Brinkmann. All rights reserved. #}
+its BSD License. Copyright (c) 2013, Marc Brinkmann. All rights reserved. #}
+
+{#  This file was part of Bootstrap-Flask and was modified under the terms of
+its MIT License. Copyright (c) 2018 Grey Li. All rights reserved. #}
 
 {% macro form_errors(form, hiddens=True) %}
   {%- if form.errors %}
@@ -18,7 +21,7 @@
 {%- endmacro %}
 
 {% macro _hz_form_wrap(horizontal_columns, form_type, add_group=False, required=False, extra_classes=None) %}
-  {% if add_group %} <div class="ui container {% if required %} required {% endif %}"> {% endif %}
+  {% if add_group %} <div class="ui container{% if required %} required{% endif %}"> {% endif %}
     {{caller()}}
   {% if add_group %} </div> {% endif %}
 {% endmacro %}
@@ -26,15 +29,28 @@
 {% macro form_field(field,
                     form_type="basic",
                     horizontal_columns=('sixteen', 'sixteen', 'sixteen'),
-                    button_map={}) %}
+                    button_map={},
+                    button_style='',
+                    button_size='') %}
   {# this is a workaround hack for the more straightforward-code of just passing required=required parameter.
   older versions of wtforms do not have the necessary fix for required=False attributes, but will also not set the required flag in the first place. we skirt the issue using the code below #}
   {% if field.flags.required and not required in kwargs %}
     {% set kwargs = dict(required=True, **kwargs) %}
   {% endif %}
+
+  {# combine render_kw class or class/class_ argument with Bootstrap classes #}
+    {% set render_kw_class = ' ' + field.render_kw.class if field.render_kw.class else '' %}
+    {% set class = kwargs.pop('class', '') or kwargs.pop('class_', '') %}
+    {% if class %}
+        {# override render_kw class when class/class_ presents as keyword argument #}
+        {% set render_kw_class = '' %}
+        {% set render_kw_class_ = '' %}
+        {% set class = ' ' + class %}
+    {% endif %}
+    {% set extra_classes = render_kw_class + class %}
   
   {% if field.widget.input_type == 'checkbox' %}
-    {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required, extra_classes=None) %}
+    {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required) %}
       <div class="ui field">
         <div class="ui checkbox">
           {{field()|safe}}
@@ -42,11 +58,11 @@
         </div>
     </div>
     {% endcall %}
-    {%- elif field.type == 'RadioField' -%}
+  {%- elif field.type == 'RadioField' -%}
     {# note: A cleaner solution would be rendering depending on the widget,
     this is just a hack for now, until I can think of something better #}
-    {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required,extra_classes=None) %}
-      <div class="grouped {% if extra_classes %} {{ extra_classes }}{% endif %} fields">
+    {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required, extra_classes=extra_classes) %}
+      <div class="grouped{% if extra_classes %} {{ extra_classes }}{% endif %} fields">
         {{field.label|safe}}
         {% for item in field -%}
           <div class="field">
@@ -62,45 +78,53 @@
     {# deal with jinja scoping issues? #}
     {% set field_kwargs = kwargs %}
     {# note: same issue as above - should check widget, not field type #}
-    {{field(class='ui submit button %s' % button_map.get(field.name, 'default'), **field_kwargs)}}
-    
-  
-    {%- elif field.type == 'FormField' -%}
+    {% set default_button_style = button_style or config.SEMANTIC_BUTTON_SUBMIT_STYLE %}
+    {% set default_button_size = button_size or config.SEMANTIC_BUTTON_SUBMIT_SIZE %}
+    {% if default_button_style and default_button_size and extra_classes %}
+        {{ field(class='ui submit button %s %s %s' % (button_map.get(field.name, default_button_style), default_button_size, extra_classes), **field_kwargs) }}
+    {% elif default_button_style and default_button_size %}
+        {{ field(class='ui submit button %s %s' % (button_map.get(field.name, default_button_style), default_button_size), **field_kwargs) }}
+    {% elif default_button_style and extra_classes %}
+        {{ field(class='ui submit button %s %s' % (button_map.get(field.name, default_button_style), extra_classes), **field_kwargs) }}
+    {% else %}
+        {{ field(class='ui submit button %s' % (button_map.get(field.name, default_button_style)), **field_kwargs) }}
+    {% endif %}
+    {%- elif field.type in ['CSRFTokenField', 'HiddenField'] -%}
+        {{ field()|safe }}
+    {%- elif field.type in ['FormField', 'FieldList'] -%}
     {# note: FormFields are tricky to get right and complex setups requiring
     these are probably beyond the scope of what this macro tries to do.
     the code below ensures that things don't break horribly if we run into
     one, but does not try too hard to get things pretty. #}
-    <fieldset class="field">
-      <legend>{{field.label}}</legend>
-      {%- for subfield in field %}
-        {% if not semantic_is_hidden_field(subfield) -%}
-          {{ form_field(subfield,
+      <fieldset class="field">
+          <legend>{{field.label}}</legend>
+          {%- for subfield in field %}
+              {% if not semantic_is_hidden_field(subfield) -%}
+              {{ form_field(subfield,
                       form_type=form_type,
                       horizontal_columns=horizontal_columns,
                       button_map=button_map) }}
-      {%- endif %}
-    {%- endfor %}
-    </fieldset>
+              {%- endif %}
+          {%- endfor %}
+      </fieldset>
   {% else -%}
-  <div class="{% if form_type == "inline" %}inline fields {% else%}field{% endif -%}{%- if field.flags.required %} required {% endif -%}">
+      <div class="ui{% if form_type == "inline" %} inline fields{% else %} field{% endif %}{%- if field.flags.required %} required{% endif -%}">
       {%- if form_type == "inline" %}
-        
+        <div class="field {{horizontal_columns[0]}} wide mobile {{horizontal_columns[1]}} wide tablet {{horizontal_columns[2]}} wide computer column">
           {{field.label|safe}}
           {% if field.type == 'FileField' %}
             {{field(**kwargs)|safe}}
           {% else %}
             {{field(**kwargs)|safe}}
           {% endif %}
-
+        </div>
       {% elif form_type == "horizontal" %}
-        
           {{field.label|safe}}
           {% if field.type == 'FileField' %}
             {{field(**kwargs)|safe}}
           {% else %}
             {{field(class="ui field", **kwargs)|safe}}
           {% endif %}
-        
         {%- if field.errors %}
           {%- for error in field.errors %}
             {% call _hz_form_wrap(horizontal_columns, form_type, required=required, extra_classes=None) %}
@@ -115,13 +139,14 @@
           {% endcall %}
         {%- endif %}
       {%- else -%}
+        <div class="field {{horizontal_columns[0]}} wide mobile {{horizontal_columns[1]}} wide tablet {{horizontal_columns[2]}} wide computer column">
           {{field.label|safe}}
           {% if field.type == 'FileField' %}
             {{field(**kwargs)|safe}}
           {% else %}
             {{field(**kwargs)|safe}}
           {% endif %}
-
+        </div>
         {%- if field.errors %}
           {%- for error in field.errors %}
             <div class="ui error message">
@@ -206,7 +231,7 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
     </h4>
   {% endif -%}
   {{ form_errors(form, hiddens='only') }}
-
+ <div class="fields">
   {%- for field in form %}
     {% if not semantic_is_hidden_field(field) -%}
       {{ form_field(field,
@@ -215,6 +240,6 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
                     button_map=button_map) }}
     {%- endif %}
   {%- endfor %}
-
+</div>
 </form>
 {%- endmacro %}
