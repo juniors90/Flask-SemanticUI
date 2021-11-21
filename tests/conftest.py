@@ -54,16 +54,21 @@ class ExampleForm(FlaskForm):
 
 
 class HelloForm(FlaskForm):
-    name = StringField('Name')
-    username = StringField('Username', validators=[DataRequired(), Length(1, 20)])
-    password = PasswordField('Password', validators=[DataRequired(), Length(8, 150)])
-    remember = BooleanField('Remember me')
+    name = StringField("Name")
+    username = StringField(
+        "Username", validators=[DataRequired(), Length(1, 20)]
+    )
+    password = PasswordField(
+        "Password", validators=[DataRequired(), Length(8, 150)]
+    )
+    remember = BooleanField("Remember me")
     hidden = HiddenField()
     submit = SubmitField()
 
 
 if t.TYPE_CHECKING:
     from flask.testing import FlaskClient
+
 
 @pt.fixture
 def hello_form():
@@ -79,9 +84,9 @@ def example_form():
 def app() -> "flask.Flask":
     app = flask.Flask(__name__)
     app.testing = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.secret_key = 'for test'
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.secret_key = "for test"
     app.debug = False
 
     @app.route("/")

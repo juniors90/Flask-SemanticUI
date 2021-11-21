@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% from 'semantic/pagination.html' import render_sui_pager, render_pagination %}
+
+{% block content %}
+    <h2>Messages</h2>
+    {% for message in messages %}
+    <div class="ui comments">
+        <div class="comment">
+            <div class="content">
+                <div class="text">
+                    Message {{ message.id }}: Hey guys, I hope this example comment is helping you read this documentation.
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <h2>Render a simple pagination component with render_sui_pager</h2>
+    <pre>{% raw %}{{ render_sui_pager(pagination) }}{% endraw %}</pre>
+    {{ render_sui_pager(pagination) }}
+    <h2>Render a standard pagination component with render_pagination</h2>
+    <pre>{% raw %}{{ render_pagination(pagination) }}{% endraw %}</pre>
+    {{ render_pagination(pagination) }}
+{% endblock %}

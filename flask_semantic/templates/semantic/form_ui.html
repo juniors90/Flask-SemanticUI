@@ -105,7 +105,7 @@ the necessary fix for required=False attributes, but will also not set the requi
         {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required) %}
             {% set default_button_style = button_style or config.SEMANTIC_BUTTON__STYLE %}
             {% set default_button_size = button_size or config.SEMANTIC_BUTTON__SIZE %}
-            {{ field(class='ui submit button %s %s %s' % (button_map.get(field.name, default_button_style), default_button_size, extra_classes), **field_kwargs) }}
+            {{ field(class='%s ui button %s %s' % (default_button_size, button_map.get(field.name, default_button_style), extra_classes), **field_kwargs) }}
         {% endcall %}
     {%- elif field.type in ['CSRFTokenField', 'HiddenField'] -%}
         {{ field()|safe }}
@@ -158,7 +158,7 @@ the necessary fix for required=False attributes, but will also not set the requi
     {% endif %}
 {% endmacro %}
 
-{# valid form types are "basic", "inline" and "horizontal" #}
+{# valid form types are "basic" and "inline" #}
 {% macro quick_form(form,
                     action="",
                     method="post",
@@ -241,11 +241,11 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
 {%- endmacro %}
 
 {% macro form_field_row(fields,
-    col_fields={"numbers":["one","two","three","four","five","six", "seven", "eight", "nine", "ten"]},
+    row_class={"numbers":["one","two","three","four","five","six", "seven", "eight", "nine", "ten"]},
     button_map={},
     button_style='',
     button_size='') %}
-<div class="{{col_fields["numbers"][fields|length - 1]}} fields">
+<div class="{{row_class["numbers"][fields|length - 1]}} fields">
   {% for field in fields %}
       {{ form_field(field, button_map=button_map, button_style=button_style, button_size=button_size) }}
   {% endfor %}

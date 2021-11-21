@@ -18,6 +18,7 @@ exclude tox.ini
 exclude pyproject.toml
 exclude *.model 
 recursive-exclude tests *
+recursive-exclude sample_app *
 recursive-exclude testscopia *
 recursive-exclude docs *
 recursive-exclude res *

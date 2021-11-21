@@ -1,0 +1,72 @@
+{% from 'semantic/nav.html' import nav_link %}
+{% from 'semantic/utils.html' import render_messages %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Flask-SematicUI Demo Application</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {{ semantic.load_css() }}
+    <style type="text/css">
+        #alert {
+            display: 'block';
+        }
+        pre {
+            background: #ddd;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    
+        <div class="ui attached stackable menu">
+                {{ nav_link('index', 'Home', 'home', 'teal') }}
+                {{ nav_link('test_form', 'Form', 'home', 'teal') }}
+                {{ nav_link('test_nav', 'Nav', 'home', 'teal') }}
+                {{ nav_link('test_pagination', 'Pagination', 'home', 'teal') }}
+                {{ nav_link('test_flash', 'Flash Messages', 'home', 'teal') }}
+                {{ nav_link('test_table', 'Table', 'home', 'teal') }}
+                {{ nav_link('test_icon', 'Icon', 'home', 'teal') }}
+                <div class="ui simple dropdown teal item">
+                    Sample dropdown <i class="dropdown icon"></i>
+                    <div class="menu">
+                    <a class="item" href="#" target="_blank"><i class="file code outline icon"></i>Documentation</a>
+                    <a class="item" href="#" target="_blank"><i class="file code icon"></i>Semantic UI Docs</a>
+                    <a class="item" href="https://github.com/juniors90/Flask-SemanticUI" target="_blank"><i class="github icon"></i>GitHub</a>
+                </div>
+                </div>
+                <div class="right item">
+                    <div class="ui input">
+                        <input type="text" placeholder="Search..." />
+                    </div>
+                </div>
+        </div>
+    
+    <main class="ui text container">
+        {{ render_messages(container=True, dismissible=True) }}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="ui text center">
+        {% block footer %}
+            <small> &copy; 2021–<script>document.write(new Date().getFullYear())</script> <a href="https://github.com/juniors90">Juniors90 </a>
+            </small>
+        {% endblock %}
+    </footer>
+
+    {{ semantic.load_js() }}
+    <script>
+    window.onload = function(){
+        let elements= document.getElementsByClassName('close');
+        for(let el of elements) {
+            el.addEventListener("click", dismissibleItem);
+        };
+    };
+    function dismissibleItem(){
+      document.getElementById('alert').style.display='none';
+    };
+    </script>
+  </body>
+</body>
+</html>
