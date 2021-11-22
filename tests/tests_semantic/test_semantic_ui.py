@@ -8,10 +8,18 @@
 # its MIT License. Copyright (c) 2018 Grey Li. All rights reserved.
 #
 # This file is part of the
-# Flask-SemanticUI Project (https://github.com/juniors90/Flask-SemanticUI/).
+#   Flask-SemanticUI Project (
+#                 https://github.com/juniors90/Flask-SemanticUI/
+#    ).
 # Copyright (c) 2021, Ferreira Juan David
 # License: MIT
-# Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
+# Full Text:
+#    https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
+
+# =====================================================================
+# TESTS
+# =====================================================================
+
 
 from flask import current_app
 

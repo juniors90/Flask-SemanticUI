@@ -33,7 +33,8 @@ def test_render_ui_hidden_errors(app, client):
             pass
         return render_template_string(
             """
-        {% from 'semantic/form_ui.html' import render_ui_field, render_ui_hidden_errors %}
+        {% from 'semantic/form_ui.html' import render_ui_field,
+                                               render_ui_hidden_errors %}
         <form method="post">
             {{ form.hidden_tag() }}
             {{ render_ui_hidden_errors(form) }}

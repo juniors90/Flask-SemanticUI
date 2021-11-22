@@ -107,6 +107,4 @@ def test_render_ui_field_with_kwargs(app, client, hello_form):
     assert '<label for="password">Password</label>' in data
     assert '<input class="" id="username"' in data
     assert '<input class="" id="password"' in data
-    assert (
-        '<input class=" ui primary button " id="submit"' in data
-    )
+    assert '<input class=" ui primary button " id="submit"' in data
