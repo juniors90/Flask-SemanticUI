@@ -34,9 +34,6 @@ content %}
   <form class="ui form" method="post">
     {{ form.csrf_token }}
     {{ wtf.form_field_row([form.username, form.password]) }}
-    {{ wtf.form_field_row([form.username, form.password]) }}
-    {{ wtf.form_field_row([form.username, form.password]) }}
-    {{ wtf.form_field_row([form.username, form.password]) }}
     {{ wtf.form_field(form.submit) }}
     {{ wtf.form_field(form.remember) }}
   </form>

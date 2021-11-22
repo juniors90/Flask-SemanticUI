@@ -29,9 +29,7 @@ from setuptools import setup  # noqa
 PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 
-REQUIREMENTS = [
-    "Flask>=2.0.2"
-]
+REQUIREMENTS = ["Flask>=2.0.2"]
 
 with open(PATH / "flask_semantic" / "__init__.py") as fp:
     for line in fp.readlines():

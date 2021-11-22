@@ -112,7 +112,7 @@ class _SemanticUI(object):
         app.config.setdefault("SEMANTIC_SERVE_LOCAL", False)
         app.config.setdefault("SEMANTIC_BUTTON_STYLE", "primary")
         app.config.setdefault("SEMANTIC_BUTTON_SUBMIT_STYLE", "default")
-        app.config.setdefault("SEMANTIC_BUTTON_SIZE", None)
+        app.config.setdefault("SEMANTIC_BUTTON_SIZE", "")
         app.config.setdefault("SEMANTIC_BUTTON_SUBMIT_SIZE", None)
         app.config.setdefault("SEMANTIC_ICON_TYPE", None)
         app.config.setdefault("SEMANTIC_ICON_COLOR", None)

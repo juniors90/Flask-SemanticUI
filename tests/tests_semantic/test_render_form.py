@@ -13,28 +13,31 @@
 # License: MIT
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
-from flask import render_template_string
+from flask import render_template_string, current_app
 from flask_wtf import FlaskForm
 from wtforms import (
+    BooleanField,
     FileField,
     MultipleFileField,
     PasswordField,
     StringField,
     SubmitField,
+    RadioField,
 )
+from wtforms.validators import DataRequired
 
 
-def test_render_form(app, client, example_form):
+def test_quick_form(app, client, example_form):
     @app.route("/form")
     def test():
         form = example_form()
         return render_template_string(
             """
-                {% import "semantic/wtf.html" as wtf %}
+                {% import "semantic/form_ui.html" as wtf %}
                 {{ wtf.quick_form(form,
                                   form_title='Title for Shipping Information',
                                   extra_classes='inverted',
-                                  form_type='horizontal',
+                                  form_type='inverted',
                                   button_map={'submit_button': 'primary'})}}
                 """,
             form=form,
@@ -42,11 +45,11 @@ def test_render_form(app, client, example_form):
 
     response = client.get("/form")
     data = response.get_data(as_text=True)
-    assert '<input class="ui field" id="name" name="name"' in data
-    # assert '<input class="ui field" id="username" name="username"' in data
-    assert '<input class="ui field" id="country_code"' in data
+    assert '<input class="" id="name"' in data
+    assert '<input class="" id="username"' in data
+    assert '<input class="" id="country_code"' in data
     assert '<input id="radio_field-0" name="radio_field"' in data
-    assert '<input class="ui submit button primary" id="submit_button"' in data
+    assert '<input class=" ui primary button " id="submit_button"' in data
 
 
 # test WTForm field description for TextFieldField
@@ -60,7 +63,7 @@ def test_form_description_for_textfield(app, client):
         form = TestForm()
         return render_template_string(
             """
-                    {% import "semantic/wtf.html" as wtf %}
+                    {% import "semantic/form_ui.html" as wtf %}
                     {{ wtf.quick_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
@@ -72,11 +75,14 @@ def test_form_description_for_textfield(app, client):
     data = response.get_data(as_text=True)
     assert "Title for Shipping Information" in data
     assert "<p>This is field one.</p>" in data
-    assert '<input id="field1" name="field1" type="text" value="">' in data
+    assert (
+        '<input class="" id="field1" name="field1" type="text" value="">'
+        in data
+    )
 
 
-# test WTForm fields for render_form and render_field
-def test_render_form_enctype(app, client):
+# test WTForm fields for quick_form and render_field
+def test_quick_form_enctype(app, client):
     class SingleUploadForm(FlaskForm):
         sample = FileField("Sample upload")
         submit_button = SubmitField("Submit Form")
@@ -90,7 +96,7 @@ def test_render_form_enctype(app, client):
         form = SingleUploadForm()
         return render_template_string(
             """
-            {% import "semantic/wtf.html" as wtf %}
+            {% import "semantic/form_ui.html" as wtf %}
             {{ wtf.quick_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
@@ -103,7 +109,7 @@ def test_render_form_enctype(app, client):
         form = MultiUploadForm()
         return render_template_string(
             """
-            {% import "semantic/wtf.html" as wtf %}
+            {% import "semantic/form_ui.html" as wtf %}
             {{ wtf.quick_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
@@ -123,14 +129,12 @@ def test_render_form_enctype(app, client):
 # test render_kw class for WTForms field
 def test_form_render_kw_class(app, client):
     class LoginForm(FlaskForm):
-        username = StringField(
-            "Username", render_kw={"class": "my-awesome-class"}
-        )
+        username = StringField("Username")
         phone = PasswordField(
             "Password", render_kw={"class": "my-password-class"}
         )
         submit_button = SubmitField(
-            "Submit Form", render_kw={"class": "class-not-found"}
+            "Submit Form", render_kw={"class": "my-awesome-class"}
         )
 
     @app.route("/render_kw")
@@ -138,7 +142,7 @@ def test_form_render_kw_class(app, client):
         form = LoginForm()
         return render_template_string(
             """
-            {% import "semantic/wtf.html" as wtf %}
+            {% import "semantic/form_ui.html" as wtf %}
             {{ wtf.quick_form(form,
                 form_title='Title for Shipping Information',
                 button_map={'submit_button': 'my-class-customs'}) }}
@@ -148,7 +152,130 @@ def test_form_render_kw_class(app, client):
 
     response = client.get("/render_kw")
     data = response.get_data(as_text=True)
+    assert "my-awesome-class" in data
+    assert "button" in data
     assert 'class="my-password-class"' in data
     assert "class-not-found" not in data
-    assert 'class="my-awesome-class"' in data
-    assert 'class="ui submit button my-class-customs"' in data
+    assert 'class=" ui my-class-customs button my-awesome-class"' in data
+
+
+def test_button_size(app, client, hello_form):
+    with app.app_context():
+        assert current_app.config["SEMANTIC_BUTTON_SIZE"] == ""
+    app.config["SEMANTIC_BUTTON_SIZE"] = "medium"
+    assert "semantic" in app.extensions
+
+    @app.route("/form")
+    def test():
+        form = hello_form()
+        return render_template_string(
+            """
+        {% from 'semantic/form_ui.html' import quick_form %}
+        {{ quick_form(form) }}
+        """,
+            form=form,
+        )
+
+    response = client.get("/form")
+    data = response.get_data(as_text=True)
+    assert "medium" in data
+
+    @app.route("/form2")
+    def test_overwrite():
+        form = hello_form()
+        return render_template_string(
+            """
+        {% from 'semantic/form_ui.html' import quick_form %}
+        {{ quick_form(form, button_size='large') }}
+        """,
+            form=form,
+        )
+
+    response = client.get("/form2")
+    data = response.get_data(as_text=True)
+    assert "medium" not in data
+    assert "large" in data
+
+
+def test_button_style(app, client, hello_form):
+    with app.app_context():
+        assert current_app.config["SEMANTIC_BUTTON_STYLE"] == "primary"
+    app.config["SEMANTIC_BUTTON_STYLE"] = "secondary"
+
+    @app.route("/form")
+    def test():
+        form = hello_form()
+        return render_template_string(
+            """
+        {% from 'semantic/form_ui.html' import quick_form %}
+        {{ quick_form(form) }}
+        """,
+            form=form,
+        )
+
+    response = client.get("/form")
+    data = response.get_data(as_text=True)
+    assert "secondary" in data
+
+    @app.route("/form2")
+    def test_overwrite():
+        form = hello_form()
+        return render_template_string(
+            """
+        {% from 'semantic/form_ui.html' import quick_form %}
+        {{ quick_form(form, button_style='success') }}
+        """,
+            form=form,
+        )
+
+    response = client.get("/form2")
+    data = response.get_data(as_text=True)
+    assert "primary" not in data
+    assert "success" in data
+
+    @app.route("/form3")
+    def test_button_map():
+        form = hello_form()
+        return render_template_string(
+            """
+        {% from 'semantic/form_ui.html' import quick_form %}
+        {{ quick_form(form, button_map={'submit': 'negative'}) }}
+        """,
+            form=form,
+        )
+
+    response = client.get("/form3")
+    data = response.get_data(as_text=True)
+    assert "primary" not in data
+    assert "negative" in data
+
+
+def test_error_message_for_radiofield_and_booleanfield(app, client):
+    class TestForm(FlaskForm):
+        remember = BooleanField("Remember me", validators=[DataRequired()])
+        option = RadioField(
+            choices=[
+                ("dog", "Dog"),
+                ("cat", "Cat"),
+                ("bird", "Bird"),
+                ("alien", "Alien"),
+            ],
+            validators=[DataRequired()],
+        )
+
+    @app.route("/error", methods=["GET", "POST"])
+    def error():
+        form = TestForm()
+        if form.validate_on_submit():
+            pass
+        return render_template_string(
+            """
+        {% from 'semantic/form_ui.html' import quick_form %}
+        {{ quick_form(form) }}
+        """,
+            form=form,
+        )
+
+    response = client.post("/error", follow_redirects=True)
+    data = response.get_data(as_text=True)
+    assert "This field is required" in data

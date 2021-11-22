@@ -2,7 +2,7 @@
 {% macro nav_link(endpoint, text, icon, color=None) %}
 	{% if request.endpoint is not none %}
 		{% if request.endpoint.endswith(endpoint) %}
-		    <a class="active {% if color %} {{ color }} {% endif %}item" href="{{ url_for(endpoint) }}"><i class="{{ icon }} icon"></i>{{ text }}</a>
+		    <a class="active{% if color %} {{ color }}{% endif %} item" href="{{ url_for(endpoint) }}"><i class="{{ icon }} icon"></i>{{ text }}</a>
 		{% else %}
 		    <a class="item" href="{{ url_for(endpoint) }}"><i class="{{ icon }} icon"></i>{{ text }}</a>
 		{% endif %}
@@ -16,7 +16,7 @@
         {% if active %}
             <a class="active section">{{ text }}</a>
         {% else %}
-            <a href="{{ url_for(endpoint, **kwargs) }}" class="section">{{ text }}</a>
+            <a class="section" href="{{ url_for(endpoint, **kwargs) }}">{{ text }}</a>
         {% endif %}
             <i class="{% if icon %}{{icon}}{% else %}right chevron{% endif %} icon divider"></i>
 {% endmacro %}

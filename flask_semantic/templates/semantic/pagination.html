@@ -1,28 +1,29 @@
 {#  This file was part of Flask-Bootstrap and was modified under the terms of
  its BSD License. Copyright (c) 2013, Marc Brinkmann. All rights reserved. #}
+
 {% from 'semantic/utils.html' import arg_url_for %}
 
 {% macro render_sui_pager(pagination,
                       fragment='',
-                      prev=('<span aria-hidden="true">&larr;</span> Previous')|safe,
-                      next=('Next <span aria-hidden="true">&rarr;</span>')|safe,
-                      align='') -%}
-
-<div class="ui pagination menu">
-    <a class="item"
-        href="{{ url_for(request.endpoint, page=pagination.prev_num, **kwargs) + fragment if pagination.has_prev else '#' }}">
-        {{ prev }}
+                      prev='left chevron',
+                      next='right chevron',
+                      extra_classes=None,
+                      color_active_item=None) -%}
+<nav aria-label="Page navigation">
+<div class="ui pagination{% if extra_classes %} {{extra_classes}}{%endif%} menu">
+    <a class="{% if color_active_item %}active {{color_active_item}}{%endif%}item" href="{{ url_for(request.endpoint, page=pagination.prev_num, **kwargs) + fragment if pagination.has_prev else '#' }}">
+        <i class="{{ prev }} icon"></i>Prev
     </a>
     {% if not (pagination.has_next and pagination.has_prev) %}
     <div class="disabled item">
     ...
     </div>
     {% endif %}
-    <a class="item"
-       href="{{ url_for(request.endpoint, page=pagination.next_num, **kwargs) + fragment if pagination.has_next else '#' }}">
-        {{ next }}
+    <a class="{% if color_active_item %}active {{color_active_item}}{%endif%}item" href="{{ url_for(request.endpoint, page=pagination.next_num, **kwargs) + fragment if pagination.has_next else '#' }}">
+        Next<i class="{{ next }} icon"></i>
     </a>
 </div>
+</nav>
 {%- endmacro %}
 
 {% macro render_pagination(pagination,
@@ -33,7 +34,8 @@
                            ellipses='…',
                            args={},
                            fragment='',
-                           align=''
+                           extra_classes=None,
+                           color_active_item=None
                            )-%}
     {% if fragment != '' and not fragment.startswith('#') %}
         {% set fragment = '#' + fragment %}
@@ -43,7 +45,8 @@
        url_args.update(request.args if not endpoint else {}),
        url_args.update(args) -%}
         {% with endpoint = endpoint or request.endpoint %}
-            <div class="ui pagination menu">
+        <nav aria-label="Page navigation">
+            <div class="ui pagination{% if extra_classes %} {{extra_classes}}{%endif%} menu">
                 
                     {# prev and next are only show if a symbol has been passed. #}
                     {% if prev != None -%}
@@ -57,8 +60,7 @@
                             {% if page != pagination.page %}
                                 <a class="item" href="{{ arg_url_for(endpoint, url_args, page=page) }}{{ fragment }}">{{ page }}</a>
                             {% else %}
-                                <a class="active item" href="#">{{ page }}
-                                </a>
+                                <a class="active{% if color_active_item %} {{color_active_item}}{%endif%} item" href="#">{{ page }}</a>
                             {% endif %}
                         {% elif ellipses != None %}
                             <div class="disabled item">
@@ -74,5 +76,6 @@
                     {%- endif -%}
             </div>
         {% endwith %}
+        </nav>
     {% endwith %}
 {% endmacro %}

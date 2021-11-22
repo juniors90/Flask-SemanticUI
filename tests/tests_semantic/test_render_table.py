@@ -25,30 +25,34 @@ def test_render_simple_table(app, client):
         id = db.Column(db.Integer, primary_key=True)
         text = db.Column(db.Text)
 
-    @app.route('/table')
+    @app.route("/table")
     def test():
         db.drop_all()
         db.create_all()
         for i in range(10):
-            m = Message(text=f'Test message {i+1}')
+            m = Message(text=f"Test message {i+1}")
             db.session.add(m)
         db.session.commit()
-        page = request.args.get('page', 1, type=int)
+        page = request.args.get("page", 1, type=int)
         pagination = Message.query.paginate(page, per_page=10)
         messages = pagination.items
-        titles = [('id', '#'), ('text', 'Message')]
-        return render_template_string('''
+        titles = [("id", "#"), ("text", "Message")]
+        return render_template_string(
+            """
                         {% from 'semantic/table.html' import render_table %}
                         {{ render_table(messages, titles) }}
-                        ''', titles=titles, messages=messages)
+                        """,
+            titles=titles,
+            messages=messages,
+        )
 
-    response = client.get('/table')
+    response = client.get("/table")
     data = response.get_data(as_text=True)
     assert '<table class="ui celled table">' in data
-    assert '<th>#</th>' in data
-    assert '<th>Message</th>' in data
+    assert "<th>#</th>" in data
+    assert "<th>Message</th>" in data
     assert '<td data-label="#">1</td>' in data
-    assert '<td>Test message 1</td>' in data
+    assert "<td>Test message 1</td>" in data
 
 
 def test_render_customized_table(app, client):
@@ -58,19 +62,20 @@ def test_render_customized_table(app, client):
         id = db.Column(db.Integer, primary_key=True)
         text = db.Column(db.Text)
 
-    @app.route('/table')
+    @app.route("/table")
     def test():
         db.drop_all()
         db.create_all()
         for i in range(10):
-            msg = Message(text=f'Test message {i+1}')
+            msg = Message(text=f"Test message {i+1}")
             db.session.add(msg)
         db.session.commit()
-        page = request.args.get('page', 1, type=int)
+        page = request.args.get("page", 1, type=int)
         pagination = Message.query.paginate(page, per_page=10)
         messages = pagination.items
-        titles = [('id', '#'), ('text', 'Message')]
-        return render_template_string('''
+        titles = [("id", "#"), ("text", "Message")]
+        return render_template_string(
+            """
                 {% from 'semantic/table.html' import render_table %}
                 {{ render_table(messages, titles,
                             table_classes='ui selectable inverted table',
@@ -78,13 +83,16 @@ def test_render_customized_table(app, client):
                             caption='Messages',
                             caption_icon='circular user',
                             caption_class='ui center aligned icon header') }}
-                            ''', titles=titles, messages=messages)
+                            """,
+            titles=titles,
+            messages=messages,
+        )
 
-    response = client.get('/table')
+    response = client.get("/table")
     data = response.get_data(as_text=True)
     assert '<table class=""ui selectable inverted table"">' not in data
     assert '<thead class="my class">' in data
-    assert '<caption>Messages</caption>' not in data
+    assert "<caption>Messages</caption>" not in data
     assert '<div class="ui center aligned icon header">' in data
     assert '<i class="circular user icon"></i>' in data
 
@@ -96,51 +104,56 @@ def test_build_table_titles(app, client):
         id = db.Column(db.Integer, primary_key=True)
         text = db.Column(db.Text)
 
-    @app.route('/table')
+    @app.route("/table")
     def test():
         db.drop_all()
         db.create_all()
         for i in range(10):
-            msg = Message(text=f'Test message {i+1}')
+            msg = Message(text=f"Test message {i+1}")
             db.session.add(msg)
         db.session.commit()
-        page = request.args.get('page', 1, type=int)
+        page = request.args.get("page", 1, type=int)
         pagination = Message.query.paginate(page, per_page=10)
         messages = pagination.items
-        return render_template_string('''
+        return render_template_string(
+            """
                     {% from 'semantic/table.html' import render_table %}
                     {{ render_table(messages) }}
-                                ''', messages=messages)
+                                """,
+            messages=messages,
+        )
 
-    response = client.get('/table')
+    response = client.get("/table")
     data = response.get_data(as_text=True)
     assert '<table class="ui celled table">' in data
-    assert '<th>#</th>' in data
-    assert '<th>Text</th>' in data
+    assert "<th>#</th>" in data
+    assert "<th>Text</th>" in data
     assert '<td data-label="#">1</td>' in data
-    assert '<td>Test message 1</td>' in data
+    assert "<td>Test message 1</td>" in data
 
 
 def test_build_table_titles_with_empty_data(app, client):
-
-    @app.route('/table')
+    @app.route("/table")
     def test():
         messages = []
-        return render_template_string('''
+        return render_template_string(
+            """
                     {% from 'semantic/table.html' import render_table %}
                     {{ render_table(messages) }}
-                        ''', messages=messages)
+                        """,
+            messages=messages,
+        )
 
-    response = client.get('/table')
+    response = client.get("/table")
     assert response.status_code == 200
 
 
 def test_customize_icon_title_of_table_actions(app, client):
 
-    app.config['SEMANTIC_TABLE_VIEW_TITLE'] = 'Read'
-    app.config['SEMANTIC_TABLE_EDIT_TITLE'] = 'Update'
-    app.config['SEMANTIC_TABLE_DELETE_TITLE'] = 'Remove'
-    app.config['SEMANTIC_TABLE_NEW_TITLE'] = 'Create'
+    app.config["SEMANTIC_TABLE_VIEW_TITLE"] = "Read"
+    app.config["SEMANTIC_TABLE_EDIT_TITLE"] = "Update"
+    app.config["SEMANTIC_TABLE_DELETE_TITLE"] = "Remove"
+    app.config["SEMANTIC_TABLE_NEW_TITLE"] = "Create"
 
     db = SQLAlchemy(app)
     CSRFProtect(app)
@@ -149,27 +162,31 @@ def test_customize_icon_title_of_table_actions(app, client):
         id = db.Column(db.Integer, primary_key=True)
         text = db.Column(db.Text)
 
-    @app.route('/table')
+    @app.route("/table")
     def test():
         db.drop_all()
         db.create_all()
         for i in range(10):
-            msg = Message(text=f'Test message {i+1}')
+            msg = Message(text=f"Test message {i+1}")
             db.session.add(msg)
         db.session.commit()
-        page = request.args.get('page', 1, type=int)
+        page = request.args.get("page", 1, type=int)
         pagination = Message.query.paginate(page, per_page=10)
         messages = pagination.items
-        return render_template_string('''
+        return render_template_string(
+            """
             {% from 'semantic/table.html' import render_table %}
             {{ render_table(messages, model=model, show_actions=True,
             view_url='/view',
             edit_url='/edit',
             delete_url='/delete',
             new_url='/new') }}
-            ''', model=Message, messages=messages)
+            """,
+            model=Message,
+            messages=messages,
+        )
 
-    response = client.get('/table')
+    response = client.get("/table")
     data = response.get_data(as_text=True)
     assert 'title="Read">' in data
     assert 'title="Update">' in data

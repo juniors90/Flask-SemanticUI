@@ -210,14 +210,20 @@ def test_pagination():
 @app.route("/flash", methods=["GET", "POST"])
 def test_flash():
     flash("A simple default alert—check it out!")
-    flash("A simple primary alert—check it out!", "primary")
-    flash("A simple secondary alert—check it out!", "secondary")
-    flash("A simple success alert—check it out!", "success")
-    flash("A simple danger alert—check it out!", "danger")
-    flash("A simple warning alert—check it out!", "warning")
-    flash("A simple info alert—check it out!", "info")
-    flash("A simple light alert—check it out!", "light")
-    flash("A simple dark alert—check it out!", "dark")
+    for category in [
+        "dark",
+        "danger",
+        "debug",
+        "light",
+        "critical",
+        "error",
+        "info",
+        "warning",
+        "success",
+        "secondary",
+        "primary",
+    ]:
+        flash(f"A simple {category} alert—check it out!", category)
     flash(
         Markup(
             '<div class="ui possitive message">'
@@ -351,28 +357,35 @@ class ChauForm(FlaskForm):
     password = PasswordField(
         "Password", validators=[DataRequired(), Length(8, 150)]
     )
-    remember = BooleanField("Remember me")
+    country_code = IntegerField("Country Code", validators=[DataRequired()])
+    radio_field = RadioField(
+        "This is a radio field",
+        choices=[
+            ("head_radio", "Head radio"),
+            ("radio_76fm", "Radio '76 FM"),
+            ("lips_106", "Lips 106"),
+            ("wctr", "WCTR"),
+        ],
+    )
     hidden = HiddenField()
-    submit = SubmitField()
+    submit_button = SubmitField("Submit Form")
+    remember = BooleanField("Remember me")
 
 
 @app.route("/render_kw_class")
 def test_render_kw_class():
     form = ChauForm()
-    form.name.render_kw = {"class": "render_kw_class"}
-    form.username.render_kw = {"class": "render_kw_class"}
-    form.password.render_kw = {"class": "render_kw_class"}
     return render_template_string(
-        """
-            {% from 'semantic/form.html' import form_field %}
-            {% extends 'base.html' %}
+        """{% extends 'base.html' %}
+            {% import 'semantic/form_ui.html' as wtf %}
             {% block content %}
-            <form class="ui form error">
-            {{ form_field(form.name) }}
-            {{ form_field(form.username, class_='test') }}
-            {{ form_field(form.password, class='test') }}
-            </form>
-            {% endblock content %}
+            <div class="ui inverted segment">
+            {{ wtf.quick_form(form,
+                                  form_title='Title for Shipping Information',
+                                  extra_classes='inverted',
+                                  button_map={'submit_button': 'primary'})}}
+            {% endblock %}
+            </div>
             """,
         form=form,
     )

@@ -43,11 +43,11 @@
                 </div>
         </div>
     
-    <main class="ui text container">
+    <main class="ui text container" style="padding-top: 5em; padding-bottom: 5em;">
         {{ render_messages(container=True, dismissible=True) }}
         {% block content %}{% endblock %}
     </main>
-
+    
     <footer class="ui text center">
         {% block footer %}
             <small> &copy; 2021–<script>document.write(new Date().getFullYear())</script> <a href="https://github.com/juniors90">Juniors90 </a>

@@ -40,13 +40,13 @@ the necessary fix for required=False attributes, but will also not set the requi
     {% endif %}
 
     {# combine render_kw class or class/class_ argument with Bootstrap classes #}
-    {% set render_kw_class = ' ' + field.render_kw.class if field.render_kw.class else '' %}
+    {% set render_kw_class = '' + field.render_kw.class if field.render_kw.class else '' %}
     {% set class = kwargs.pop('class', '') or kwargs.pop('class_', '') %}
     {% if class %}
         {# override render_kw class when class/class_ presents as keyword argument #}
         {% set render_kw_class = '' %}
         {% set render_kw_class_ = '' %}
-        {% set class = ' ' + class %}
+        {% set class = '' + class %}
     {% endif %}
     {% set extra_classes = render_kw_class + class %}
 
@@ -55,7 +55,7 @@ the necessary fix for required=False attributes, but will also not set the requi
         {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required) %}
             <div class="ui field">
                 <div class="ui checkbox">
-                    {{ field(**field_kwargs)|safe }}
+                    {{ field(class="%s" % extra_classes, **field_kwargs)|safe }}
                     {{ field.label(for=field.id)|safe }}
                 </div>
             </div>
@@ -75,8 +75,8 @@ the necessary fix for required=False attributes, but will also not set the requi
     {%- elif field.type == 'RadioField' -%}
         {# note: A cleaner solution would be rendering depending on the widget,
         this is just a hack for now, until I can think of something better #}
-        <div class="grouped{% if form_type == "inline" %} inline{% endif %}{% if extra_classes %} {{ extra_classes }}{% endif %} fields">
-            {{field.label|safe}}
+        <div class="{% if form_type == "inline" %}inline{%else%}grouped{% endif %}{% if extra_classes %} {{ extra_classes }}{% endif %} fields">
+            {{field.label(style="color: #FFFFFF;")|safe}}
             {% for item in field -%}
                 <div class="field">
                     <div class="ui radio checkbox">
@@ -103,9 +103,9 @@ the necessary fix for required=False attributes, but will also not set the requi
         {% set field_kwargs = kwargs %}
         {# note: same issue as above - should check widget, not field type #}
         {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required) %}
-            {% set default_button_style = button_style or config.SEMANTIC_BUTTON__STYLE %}
-            {% set default_button_size = button_size or config.SEMANTIC_BUTTON__SIZE %}
-            {{ field(class='%s ui button %s %s' % (default_button_size, button_map.get(field.name, default_button_style), extra_classes), **field_kwargs) }}
+            {% set default_button_style = button_style or config.SEMANTIC_BUTTON_STYLE %}
+            {% set default_button_size = button_size or config.SEMANTIC_BUTTON_SIZE %}
+            {{ field(class='%s ui %s button %s' % (default_button_size, button_map.get(field.name, default_button_style), extra_classes), **field_kwargs) }}
         {% endcall %}
     {%- elif field.type in ['CSRFTokenField', 'HiddenField'] -%}
         {{ field()|safe }}
@@ -130,16 +130,16 @@ the necessary fix for required=False attributes, but will also not set the requi
       {%- if form_type == "inline" %}
           {{field.label|safe}}
           {% if field.type == 'FileField' %}
-            {{field(**kwargs)|safe}}
+            {{field(class="%s" % extra_classes, **kwargs)|safe}}
           {% else %}
             {{field(class="%s" % extra_classes, **kwargs)|safe}}
           {% endif %}
       {%- else -%}
           {{field.label|safe}}
           {% if field.type == 'FileField' %}
-            {{field(**kwargs)|safe}}
+            {{field(class="%s" % extra_classes, **kwargs)|safe}}
           {% else %}
-            {{field(**kwargs)|safe}}
+            {{field(class="%s" % extra_classes, **kwargs)|safe}}
           {% endif %}
         {%- if field.errors %}
           {%- for error in field.errors %}
@@ -241,13 +241,11 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
 {%- endmacro %}
 
 {% macro form_field_row(fields,
-    row_class={"numbers":["one","two","three","four","five","six", "seven", "eight", "nine", "ten"]},
-    button_map={},
-    button_style='',
-    button_size='') %}
+    row_class={"numbers":["one","two","three","four","five","six", "seven", "eight", "nine", "ten"]}
+    ) %}
 <div class="{{row_class["numbers"][fields|length - 1]}} fields">
   {% for field in fields %}
-      {{ form_field(field, button_map=button_map, button_style=button_style, button_size=button_size) }}
+      {{ form_field(field) }}
   {% endfor %}
 </div>
 {% endmacro %}
