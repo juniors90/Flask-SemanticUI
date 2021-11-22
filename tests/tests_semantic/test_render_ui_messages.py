@@ -1,14 +1,14 @@
 from flask import flash, render_template_string
 
 
-def test_render_messages(app, client):
+def test_render_ui_messages(app, client):
     @app.route("/messages")
     def test_messages():
         flash("test message", "danger")
         return render_template_string(
             """
-                        {% from 'semantic/utils.html' import render_messages %}
-                        {{ render_messages() }}
+                        {% from 'semantic/utils.html' import render_ui_messages %}
+                        {{ render_ui_messages() }}
                         """
         )
 
@@ -17,8 +17,8 @@ def test_render_messages(app, client):
         flash("test message", "danger")
         return render_template_string(
             """
-                        {% from 'semantic/utils.html' import render_messages %}
-                        {{ render_messages(container=True) }}
+                        {% from 'semantic/utils.html' import render_ui_messages %}
+                        {{ render_ui_messages(container=True) }}
                         """
         )
 
@@ -27,8 +27,8 @@ def test_render_messages(app, client):
         flash("test message", "danger")
         return render_template_string(
             """
-                        {% from 'semantic/utils.html' import render_messages %}
-                        {{ render_messages(dismissible=True) }}
+                        {% from 'semantic/utils.html' import render_ui_messages %}
+                        {{ render_ui_messages(dismissible=True) }}
                         """
         )
 
@@ -51,8 +51,8 @@ def test_render_messages(app, client):
             flash(f"A simple {category} alert—check it out!", category)
         return render_template_string(
             """
-                        {% from 'semantic/utils.html' import render_messages %}
-                        {{ render_messages(dismissible=True) }}
+                        {% from 'semantic/utils.html' import render_ui_messages %}
+                        {{ render_ui_messages(dismissible=True) }}
                         """
         )
 

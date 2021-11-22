@@ -1,4 +1,4 @@
-{% from 'semantic/utils.html' import render_sui_icon, arg_url_for %}
+{% from 'semantic/utils.html' import render_ui_icon, arg_url_for %}
 
 
 {% macro build_url(endpoint, model, pk, url_tuples) %}
@@ -25,7 +25,7 @@
     {%- endwith %}
 {%- endmacro %}
 
-{% macro render_table(data,
+{% macro render_ui_table(data,
                       titles=None,
                       primary_key='id',
                       primary_key_title='#',
@@ -35,7 +35,7 @@
                       table_classes=None,
                       header_classes=None,
                       responsive=False,
-                      responsive_class='table-responsive',
+                      responsive_class='',
                       model=None,
                       show_actions=False,
                       actions_title='Actions',
@@ -49,7 +49,7 @@
     {% set titles = get_table_titles(data, primary_key, primary_key_title) %}
 {% endif %}
 {% if responsive %}
-    <div class="{{ responsive_class }}">
+    <div class="ui {{ responsive_class }}">
 {% endif %}
 <table class="ui celled table{% if table_classes %}{{ ' ' + table_classes }}{% endif %}">
     {% if caption %}
@@ -75,7 +75,7 @@
                 href="{{ url_for(new_url) }}"
                 {% endif %}
                 title="{{ config['SEMANTIC_TABLE_NEW_TITLE'] }}">
-                {{ render_sui_icon('plus') }}
+                {{ render_ui_icon('plus') }}
             </a>
         {% endif %}
         </th>
@@ -102,7 +102,7 @@
                    {% else %}
                     href="{{ build_url(action_url[0], model, row[primary_key], action_url[1]) | trim }}"
                    {% endif %}
-                    title="{{ action_name }}">{{ render_sui_icon(action_icon) }}</a>
+                    title="{{ action_name }}">{{ render_ui_icon(action_icon) }}</a>
             {% endfor %}
             {% endif %}
             {% if view_url %}
@@ -113,7 +113,7 @@
                     href="{{ build_url(view_url[0], model, row[primary_key], view_url[1]) | trim }}"
                    {% endif %}
                     title="{{ config['SEMANTIC_TABLE_VIEW_TITLE'] }}">
-                    {{ render_sui_icon('eye') }}
+                    {{ render_ui_icon('eye') }}
                 </a>
             {% endif %}
             {% if edit_url -%}
@@ -124,7 +124,7 @@
                     href="{{ build_url(edit_url[0], model, row[primary_key], edit_url[1]) | trim }}"
                    {% endif %}
                     title="{{ config['SEMANTIC_TABLE_EDIT_TITLE'] }}">
-                    {{ render_sui_icon('pencil', 'green') }}
+                    {{ render_ui_icon('pencil', 'green') }}
                 </a>
             {%- endif %}
             {% if delete_url %}
@@ -143,7 +143,7 @@
                     href="javascript:{}"
                     onclick="this.closest('form').submit();return false;"
                     title="{{ config['SEMANTIC_TABLE_DELETE_TITLE'] }}">
-                    {{ render_sui_icon('trash', 'red') }}
+                    {{ render_ui_icon('trash', 'red') }}
                 </a>
             </form>
             {% endif %}

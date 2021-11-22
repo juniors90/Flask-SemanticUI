@@ -6,8 +6,8 @@ def test_render_breadcrumb_item_active(app, client):
     def foo():
         return render_template_string(
             """
-            {% from 'semantic/nav.html' import render_breadcrumb_sui_item %}
-            {{ render_breadcrumb_sui_item('bar', 'Bar') }}
+            {% from 'semantic/nav.html' import render_ui_breadcrumb_item %}
+            {{ render_ui_breadcrumb_item('bar', 'Bar') }}
                 """
         )
 
@@ -15,8 +15,8 @@ def test_render_breadcrumb_item_active(app, client):
     def bar():
         return render_template_string(
             """
-            {% from 'semantic/nav.html' import render_breadcrumb_sui_item %}
-            {{ render_breadcrumb_sui_item('bar', 'Bar') }}
+            {% from 'semantic/nav.html' import render_ui_breadcrumb_item %}
+            {{ render_ui_breadcrumb_item('bar', 'Bar') }}
             """
         )
 

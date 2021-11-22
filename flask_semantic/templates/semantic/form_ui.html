@@ -1,7 +1,7 @@
 {#  This file was part of Flask-Bootstrap and was modified under the terms of
  its BSD License. Copyright (c) 2013, Marc Brinkmann. All rights reserved. #}
 
-{% macro form_errors(form, hiddens=True) %}
+{% macro render_ui_hidden_errors(form, hiddens=True) %}
   {%- if form.errors %}
     {%- for fieldname, errors in form.errors.items() %}
       {%- if semantic_is_hidden_field(form[fieldname]) %}
@@ -26,7 +26,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro form_field(field,
+{% macro render_ui_field(field,
                     form_type="basic",
                     horizontal_columns=('sixteen', 'sixteen', 'sixteen'),
                     button_map={},
@@ -118,7 +118,7 @@ the necessary fix for required=False attributes, but will also not set the requi
             <legend>{{ field.label }}</legend>
             {%- for subfield in field %}
                 {% if not semantic_is_hidden_field(subfield) -%}
-                    {{ form_field(subfield,
+                    {{ render_ui_field(subfield,
                       form_type=form_type,
                       horizontal_columns=horizontal_columns,
                       button_map=button_map) }}
@@ -159,7 +159,7 @@ the necessary fix for required=False attributes, but will also not set the requi
 {% endmacro %}
 
 {# valid form types are "basic" and "inline" #}
-{% macro quick_form(form,
+{% macro render_ui_form(form,
                     action="",
                     method="post",
                     extra_classes=None,
@@ -221,7 +221,7 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
             {%- if novalidate %} novalidate{% endif -%}
             {%- if render_kw %} {{ render_kw|xmlattr }}{% endif -%}>
         {{ form.hidden_tag() }}
-        {{ form_errors(form) }}
+        {{ render_ui_hidden_errors(form) }}
         {%- if form_title != None %}
             <h4 class="ui dividing header {%- if extra_classes %} {{extra_classes}}{% endif -%}">
                 {{form_title}}
@@ -229,7 +229,7 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
         {% endif -%}
         {%- for field in form %}
             {% if not semantic_is_hidden_field(field) -%}
-                {{ form_field(field,
+                {{ render_ui_field(field,
                     form_type=form_type,
                     horizontal_columns=horizontal_columns,
                     button_map=button_map,
@@ -240,12 +240,12 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
     </form>
 {%- endmacro %}
 
-{% macro form_field_row(fields,
+{% macro render_ui_field_row(fields,
     row_class={"numbers":["one","two","three","four","five","six", "seven", "eight", "nine", "ten"]}
     ) %}
 <div class="{{row_class["numbers"][fields|length - 1]}} fields">
   {% for field in fields %}
-      {{ form_field(field) }}
+      {{ render_ui_field(field) }}
   {% endfor %}
 </div>
 {% endmacro %}

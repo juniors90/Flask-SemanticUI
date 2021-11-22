@@ -39,8 +39,8 @@ def test_render_simple_table(app, client):
         titles = [("id", "#"), ("text", "Message")]
         return render_template_string(
             """
-                        {% from 'semantic/table.html' import render_table %}
-                        {{ render_table(messages, titles) }}
+                        {% from 'semantic/table.html' import render_ui_table %}
+                        {{ render_ui_table(messages, titles) }}
                         """,
             titles=titles,
             messages=messages,
@@ -76,8 +76,8 @@ def test_render_customized_table(app, client):
         titles = [("id", "#"), ("text", "Message")]
         return render_template_string(
             """
-                {% from 'semantic/table.html' import render_table %}
-                {{ render_table(messages, titles,
+                {% from 'semantic/table.html' import render_ui_table %}
+                {{ render_ui_table(messages, titles,
                             table_classes='ui selectable inverted table',
                             header_classes='my class',
                             caption='Messages',
@@ -117,8 +117,8 @@ def test_build_table_titles(app, client):
         messages = pagination.items
         return render_template_string(
             """
-                    {% from 'semantic/table.html' import render_table %}
-                    {{ render_table(messages) }}
+                    {% from 'semantic/table.html' import render_ui_table %}
+                    {{ render_ui_table(messages) }}
                                 """,
             messages=messages,
         )
@@ -138,8 +138,8 @@ def test_build_table_titles_with_empty_data(app, client):
         messages = []
         return render_template_string(
             """
-                    {% from 'semantic/table.html' import render_table %}
-                    {{ render_table(messages) }}
+                    {% from 'semantic/table.html' import render_ui_table %}
+                    {{ render_ui_table(messages) }}
                         """,
             messages=messages,
         )
@@ -175,8 +175,8 @@ def test_customize_icon_title_of_table_actions(app, client):
         messages = pagination.items
         return render_template_string(
             """
-            {% from 'semantic/table.html' import render_table %}
-            {{ render_table(messages, model=model, show_actions=True,
+            {% from 'semantic/table.html' import render_ui_table %}
+            {{ render_ui_table(messages, model=model, show_actions=True,
             view_url='/view',
             edit_url='/edit',
             delete_url='/delete',

@@ -372,20 +372,15 @@ class ChauForm(FlaskForm):
     remember = BooleanField("Remember me")
 
 
-@app.route("/render_kw_class")
+@app.route("/render_icon")
 def test_render_kw_class():
     form = ChauForm()
     return render_template_string(
         """{% extends 'base.html' %}
-            {% import 'semantic/form_ui.html' as wtf %}
+            {% from 'semantic/utils.html' import render_icon %}
             {% block content %}
-            <div class="ui inverted segment">
-            {{ wtf.quick_form(form,
-                                  form_title='Title for Shipping Information',
-                                  extra_classes='inverted',
-                                  button_map={'submit_button': 'primary'})}}
+            {{ render_icon('user', 'teal') }}
             {% endblock %}
-            </div>
             """,
         form=form,
     )

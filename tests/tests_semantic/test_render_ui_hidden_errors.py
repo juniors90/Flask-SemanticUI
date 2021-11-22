@@ -19,7 +19,7 @@ from wtforms import HiddenField, SubmitField
 from wtforms.validators import DataRequired
 
 
-def test_form_errors(app, client):
+def test_render_ui_hidden_errors(app, client):
     class TestForm(FlaskForm):
         hide = HiddenField(
             "Hide", validators=[DataRequired("Hide field is empty.")]
@@ -33,11 +33,11 @@ def test_form_errors(app, client):
             pass
         return render_template_string(
             """
-        {% from 'semantic/wtf.html' import form_field, form_errors %}
+        {% from 'semantic/form_ui.html' import render_ui_field, render_ui_hidden_errors %}
         <form method="post">
             {{ form.hidden_tag() }}
-            {{ form_errors(form) }}
-            {{ form_field(form.submit) }}
+            {{ render_ui_hidden_errors(form) }}
+            {{ render_ui_field(form.submit) }}
         </form>
         """,
             form=form,

@@ -1,53 +1,53 @@
 {% extends 'base.html' %}
-{% import "semantic/form_ui.html" as wtf %} {% block
+{% from "semantic/form_ui.html" import render_ui_form, render_ui_field, render_ui_field_row %} {% block
 content %}
 <h1 class="ui center">Flask Semantic UI 2.4.2 - Demo Application</h1>
 
 <div class="container">
   <h2>This is the sample form (basic)</h2>
-  {{ wtf.quick_form(form, form_title='Title for Shipping Information',
+  {{ render_ui_form(form, form_title='Title for Shipping Information',
   button_map={'submit_button': 'primary'}) }}
   <h2>This is the sample form (basic)</h2>
-  {{ wtf.quick_form(form, form_title='Title for Shipping Information',
+  {{ render_ui_form(form, form_title='Title for Shipping Information',
   form_type='inline', button_map={'submit_button': 'primary'}) }}
   <h2>And as a vertical inverted form</h2>
   <div class="ui inverted segment">
-    {{ wtf.quick_form(form, form_title='Title for Shipping Information',
+    {{ render_ui_form(form, form_title='Title for Shipping Information',
     extra_classes='inverted', button_map={'submit_button': 'primary'})}}
   </div>
   <h2>The same form, inline inverted form</h2>
   <div class="ui inverted segment">
-    {{ wtf.quick_form(form, form_title='Title for Shipping Information',
+    {{ render_ui_form(form, form_title='Title for Shipping Information',
     form_type='inline',horizontal_columns=('eigth', 'sixteen', 'sixteen'), extra_classes='inverted', button_map={'submit_button':
     'primary'}) }}
   </div>
   <form class="ui form" method="post">
     {{ form.csrf_token() }}
     <div class="two fields">
-    {{ wtf.form_field(form.username) }}
-    {{ wtf.form_field(form.password) }}
+    {{ render_ui_field(form.username) }}
+    {{ render_ui_field(form.password) }}
     </div>
-    {{ wtf.form_field(form.submit) }}
-    {{ wtf.form_field(form.remember) }}
+    {{ render_ui_field(form.submit) }}
+    {{ render_ui_field(form.remember) }}
   </form>
   <h2>The same form field row</h2>
   <form class="ui form" method="post">
     {{ form.csrf_token }}
-    {{ wtf.form_field_row([form.username, form.password]) }}
-    {{ wtf.form_field(form.submit) }}
-    {{ wtf.form_field(form.remember) }}
+    {{ render_ui_field_row([form.username, form.password]) }}
+    {{ render_ui_field(form.submit) }}
+    {{ render_ui_field(form.remember) }}
   </form>
   <h2>Test FormField and FormField</h2>
   <h2>Telephone Form</h2>
-  {{ wtf.quick_form(telephone_form) }}
+  {{ render_ui_form(telephone_form) }}
 
   <h2>Telephone Form</h2>
-  {{ wtf.quick_form(telephone_form, form_type='inline') }}
+  {{ render_ui_form(telephone_form, form_type='inline') }}
 
   <h2>IM Form</h2>
-  {{ wtf.quick_form(im_form) }}
+  {{ render_ui_form(im_form) }}
 
   <h2>Contact Form</h2>
-  {{ wtf.quick_form(contact_form) }}
+  {{ render_ui_form(contact_form) }}
 </div>
 {% endblock %}

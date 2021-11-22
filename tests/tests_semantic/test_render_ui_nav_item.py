@@ -1,13 +1,13 @@
 from flask import render_template_string
 
 
-def test_render_nav_link_active(app, client):
+def test_render_render_ui_nav_item_active(app, client):
     @app.route("/active")
     def foo():
         return render_template_string(
             """
-                {% from 'semantic/nav.html' import nav_link %}
-                {{ nav_link('foo', 'Foo') }}
+                {% from 'semantic/nav.html' import render_ui_nav_item %}
+                {{ render_ui_nav_item('foo', 'Foo') }}
                 """
         )
 
@@ -19,8 +19,8 @@ def test_render_nav_link_active(app, client):
     def bar():
         return render_template_string(
             """
-                {% from 'semantic/nav.html' import nav_link %}
-                {{ nav_link('foo', 'Foo') }}
+                {% from 'semantic/nav.html' import render_ui_nav_item %}
+                {{ render_ui_nav_item('foo', 'Foo') }}
                 """
         )
 
@@ -32,8 +32,11 @@ def test_render_nav_link_active(app, client):
     def color():
         return render_template_string(
             """
-            {% from 'semantic/nav.html' import nav_link %}
-            {{ nav_link('color', 'Color', icon='envelope', color='teal') }}
+            {% from 'semantic/nav.html' import render_ui_nav_item %}
+            {{ render_ui_nav_item('color',
+                                  'Color',
+                                  icon='envelope',
+                                  color='teal') }}
             """
         )
 

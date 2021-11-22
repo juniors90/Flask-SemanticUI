@@ -2,7 +2,7 @@ from flask import render_template_string, request
 from flask_sqlalchemy import SQLAlchemy
 
 
-def test_render_pagination(app, client):
+def test_render_ui_pagination(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
@@ -21,8 +21,8 @@ def test_render_pagination(app, client):
         messages = pagination.items
         return render_template_string(
             """
-                {% from 'semantic/pagination.html' import render_pagination %}
-                {{ render_pagination(pagination) }}
+                {% from 'semantic/pagination.html' import render_ui_pagination %}
+                {{ render_ui_pagination(pagination) }}
                                 """,
             pagination=pagination,
             messages=messages,
@@ -42,7 +42,7 @@ def test_render_pagination(app, client):
     assert "10</a>" in data
 
 
-def test_render_pagination_extra_class(app, client):
+def test_render_ui_pagination_extra_class(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
@@ -61,8 +61,8 @@ def test_render_pagination_extra_class(app, client):
         messages = pagination.items
         return render_template_string(
             """
-                {% from 'semantic/pagination.html' import render_pagination %}
-                {{ render_pagination(pagination, extra_classes="inverted") }}
+                {% from 'semantic/pagination.html' import render_ui_pagination %}
+                {{ render_ui_pagination(pagination, extra_classes="inverted") }}
                                 """,
             pagination=pagination,
             messages=messages,
@@ -84,7 +84,7 @@ def test_render_pagination_extra_class(app, client):
     assert "10</a>" in data
 
 
-def test_render_pagination_extra_class_and_color_item(app, client):
+def test_render_ui_pagination_extra_class_and_color_item(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
@@ -103,8 +103,8 @@ def test_render_pagination_extra_class_and_color_item(app, client):
         messages = pagination.items
         return render_template_string(
             """
-                {% from 'semantic/pagination.html' import render_pagination %}
-                {{ render_pagination(pagination,
+                {% from 'semantic/pagination.html' import render_ui_pagination %}
+                {{ render_ui_pagination(pagination,
                                      extra_classes="inverted",
                                      color_active_item="teal") }}
                                 """,

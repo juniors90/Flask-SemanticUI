@@ -1,36 +1,36 @@
 {% extends 'base.html' %}
-{% from 'semantic/nav.html' import nav_link, render_breadcrumb_sui_item %}
+{% from 'semantic/nav.html' import render_ui_nav_item, render_ui_breadcrumb_item %}
 
 {% block content %}
-    <h2>Render Navbar item with nav_link</h2>
+    <h2>Render Navbar item with render_ui_nav_item</h2>
     <pre>{% raw %}
-{{ nav_link('test_form', 'Form') }}
-{{ nav_link('test_nav', 'Nav') }}
-{{ nav_link('test_pagination', 'Pagination') }}
-{{ nav_link('test_static', 'Static') }}
-{{ nav_link('test_flash', 'Flash Messages') }}
+{{ render_ui_nav_item('test_form', 'Form') }}
+{{ render_ui_nav_item('test_nav', 'Nav') }}
+{{ render_ui_nav_item('test_pagination', 'Pagination') }}
+{{ render_ui_nav_item('test_static', 'Static') }}
+{{ render_ui_nav_item('test_flash', 'Flash Messages') }}
 {% endraw %}</pre>
     <div class="ui attached stackable menu">
-        {{ nav_link('index', 'Home', 'home', 'teal') }}
-        {{ nav_link('test_form', 'Form', 'envelope outline', 'teal') }}
-        {{ nav_link('test_nav', 'Nav', 'map outline', 'teal') }}
-        {{ nav_link('test_pagination', 'Pagination', 'sticky note outline', 'teal') }}
+        {{ render_ui_nav_item('index', 'Home', 'home', 'teal') }}
+        {{ render_ui_nav_item('test_form', 'Form', 'envelope outline', 'teal') }}
+        {{ render_ui_nav_item('test_nav', 'Nav', 'map outline', 'teal') }}
+        {{ render_ui_nav_item('test_pagination', 'Pagination', 'sticky note outline', 'teal') }}
     </div>
 
-    <h2>Render Breadcrumb item with render_breadcrumb_sui_item</h2>
+    <h2>Render Breadcrumb item with render_ui_breadcrumb_item</h2>
 <pre>{% raw %}
-{{ render_breadcrumb_sui_item('test_form', 'Form') }}
-{{ render_breadcrumb_sui_item('test_nav', 'Nav') }}
-{{ render_breadcrumb_sui_item('test_pagination', 'Pagination') }}
-{{ render_breadcrumb_sui_item('test_flash', 'Flash Messages') }}
+{{ render_ui_breadcrumb_item('test_form', 'Form') }}
+{{ render_ui_breadcrumb_item('test_nav', 'Nav') }}
+{{ render_ui_breadcrumb_item('test_pagination', 'Pagination') }}
+{{ render_ui_breadcrumb_item('test_flash', 'Flash Messages') }}
 {% endraw %}</pre>
 <div class="ui breadcrumb">
-            {{ render_breadcrumb_sui_item('test_form', 'Form') }}
+            {{ render_ui_breadcrumb_item('test_form', 'Form') }}
             
-            {{ render_breadcrumb_sui_item('test_nav', 'Nav') }}
+            {{ render_ui_breadcrumb_item('test_nav', 'Nav') }}
             
-            {{ render_breadcrumb_sui_item('test_pagination', 'Pagination') }}
+            {{ render_ui_breadcrumb_item('test_pagination', 'Pagination') }}
             
-            {{ render_breadcrumb_sui_item('test_flash', 'Flash Messages') }}
+            {{ render_ui_breadcrumb_item('test_flash', 'Flash Messages') }}
 </div>
 {% endblock %}

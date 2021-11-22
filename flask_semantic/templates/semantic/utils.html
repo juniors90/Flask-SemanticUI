@@ -1,7 +1,7 @@
 {#  This file was part of Flask-Bootstrap and was modified under the terms of
  its BSD License. Copyright (c) 2013, Marc Brinkmann. All rights reserved. #}
 
-{% macro render_messages(messages=None, title=None, container=True, transform={
+{% macro render_ui_messages(messages=None, title=None, container=True, transform={
   'critical': 'danger',
   'error': 'danger',
   'info': 'info',
@@ -44,26 +44,10 @@
 <!-- end Message flashing -->
 {% endmacro -%}
 
-
-{% macro render_sui_icon(type=None, color=config.SEMANTIC_ICON_COLOR) -%}
-{% set sui_colors =  ["primary",
-                      "secondary",
-					  "red",
-					  "orange",
-					  "yellow",
-					  "olive",
-					  "green",
-					  "teal",
-					  "blue",
-					  "violet",
-					  "purple",
-					  "pink",
-					  "brown",
-					  "grey",
-					  "black"] %}
-<i class="{% if color %}{{ type + ' ' + color}} {% else %} {{ type }} {% endif %} icon"></i>
+{% macro render_ui_icon(type=None, color=config.SEMANTIC_ICON_COLOR) -%}
+{% set semantic_colors =  ["primary", "secondary", "red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink","brown", "grey", "black"] %}
+<i class="{% if color in semantic_colors %}{{ type + ' ' + color}}{% else %}{{ type }}{% endif %} icon"{% if color %}{% if not color in semantic_colors %} style="color: {{ color }}"{% endif %}{% endif %}></i>
 {%- endmacro %}
-
 
 {% macro form_button(url, content, method="post", class_buttton="ui submit button") -%}
 <form class="ui form error" style="display: inline;" action="{{url}}" method="{{method}}">

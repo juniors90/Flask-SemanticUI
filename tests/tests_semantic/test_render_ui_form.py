@@ -27,14 +27,14 @@ from wtforms import (
 from wtforms.validators import DataRequired
 
 
-def test_quick_form(app, client, example_form):
+def test_render_ui_form(app, client, example_form):
     @app.route("/form")
     def test():
         form = example_form()
         return render_template_string(
             """
                 {% import "semantic/form_ui.html" as wtf %}
-                {{ wtf.quick_form(form,
+                {{ wtf.render_ui_form(form,
                                   form_title='Title for Shipping Information',
                                   extra_classes='inverted',
                                   form_type='inverted',
@@ -64,7 +64,7 @@ def test_form_description_for_textfield(app, client):
         return render_template_string(
             """
                     {% import "semantic/form_ui.html" as wtf %}
-                    {{ wtf.quick_form(form,
+                    {{ wtf.render_ui_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
                     """,
@@ -81,8 +81,8 @@ def test_form_description_for_textfield(app, client):
     )
 
 
-# test WTForm fields for quick_form and render_field
-def test_quick_form_enctype(app, client):
+# test WTForm fields for render_ui_form and render_field
+def test_render_ui_form_enctype(app, client):
     class SingleUploadForm(FlaskForm):
         sample = FileField("Sample upload")
         submit_button = SubmitField("Submit Form")
@@ -97,7 +97,7 @@ def test_quick_form_enctype(app, client):
         return render_template_string(
             """
             {% import "semantic/form_ui.html" as wtf %}
-            {{ wtf.quick_form(form,
+            {{ wtf.render_ui_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
         """,
@@ -110,7 +110,7 @@ def test_quick_form_enctype(app, client):
         return render_template_string(
             """
             {% import "semantic/form_ui.html" as wtf %}
-            {{ wtf.quick_form(form,
+            {{ wtf.render_ui_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
         """,
@@ -143,7 +143,7 @@ def test_form_render_kw_class(app, client):
         return render_template_string(
             """
             {% import "semantic/form_ui.html" as wtf %}
-            {{ wtf.quick_form(form,
+            {{ wtf.render_ui_form(form,
                 form_title='Title for Shipping Information',
                 button_map={'submit_button': 'my-class-customs'}) }}
             """,
@@ -170,8 +170,8 @@ def test_button_size(app, client, hello_form):
         form = hello_form()
         return render_template_string(
             """
-        {% from 'semantic/form_ui.html' import quick_form %}
-        {{ quick_form(form) }}
+        {% from 'semantic/form_ui.html' import render_ui_form %}
+        {{ render_ui_form(form) }}
         """,
             form=form,
         )
@@ -185,8 +185,8 @@ def test_button_size(app, client, hello_form):
         form = hello_form()
         return render_template_string(
             """
-        {% from 'semantic/form_ui.html' import quick_form %}
-        {{ quick_form(form, button_size='large') }}
+        {% from 'semantic/form_ui.html' import render_ui_form %}
+        {{ render_ui_form(form, button_size='large') }}
         """,
             form=form,
         )
@@ -207,8 +207,8 @@ def test_button_style(app, client, hello_form):
         form = hello_form()
         return render_template_string(
             """
-        {% from 'semantic/form_ui.html' import quick_form %}
-        {{ quick_form(form) }}
+        {% from 'semantic/form_ui.html' import render_ui_form %}
+        {{ render_ui_form(form) }}
         """,
             form=form,
         )
@@ -222,8 +222,8 @@ def test_button_style(app, client, hello_form):
         form = hello_form()
         return render_template_string(
             """
-        {% from 'semantic/form_ui.html' import quick_form %}
-        {{ quick_form(form, button_style='success') }}
+        {% from 'semantic/form_ui.html' import render_ui_form %}
+        {{ render_ui_form(form, button_style='success') }}
         """,
             form=form,
         )
@@ -238,8 +238,8 @@ def test_button_style(app, client, hello_form):
         form = hello_form()
         return render_template_string(
             """
-        {% from 'semantic/form_ui.html' import quick_form %}
-        {{ quick_form(form, button_map={'submit': 'negative'}) }}
+        {% from 'semantic/form_ui.html' import render_ui_form %}
+        {{ render_ui_form(form, button_map={'submit': 'negative'}) }}
         """,
             form=form,
         )
@@ -270,8 +270,8 @@ def test_error_message_for_radiofield_and_booleanfield(app, client):
             pass
         return render_template_string(
             """
-        {% from 'semantic/form_ui.html' import quick_form %}
-        {{ quick_form(form) }}
+        {% from 'semantic/form_ui.html' import render_ui_form %}
+        {{ render_ui_form(form) }}
         """,
             form=form,
         )

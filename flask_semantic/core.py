@@ -116,6 +116,7 @@ class _SemanticUI(object):
         app.config.setdefault("SEMANTIC_BUTTON_SUBMIT_SIZE", None)
         app.config.setdefault("SEMANTIC_ICON_TYPE", None)
         app.config.setdefault("SEMANTIC_ICON_COLOR", None)
+        app.config.setdefault("SEMANTIC_ICON_SIZE", None)
         app.config.setdefault(
             "SEMANTIC_MSG_CATEGORY", None
         )  # change primary by None

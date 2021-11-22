@@ -1,36 +1,36 @@
 {% extends 'base.html' %}
-{% from 'semantic/utils.html' import render_sui_icon %}
+{% from 'semantic/utils.html' import render_ui_icon %}
 
 {% block content %}
     <h2>Icon</h2>
-    <pre>{% raw %}{{ render_sui_icon('heart', 'primary') }}{% endraw %}</pre>
-    Output: {{ render_sui_icon('heart', 'primary') }}
+    <pre>{% raw %}{{ render_ui_icon('heart', 'primary') }}{% endraw %}</pre>
+    Output: {{ render_ui_icon('heart', 'primary') }}
     <h2>Icon with custom size</h2>
-    <pre>{% raw %}{{ render_sui_icon('heart', 'primary') }}{% endraw %}</pre>
-    Output: {{ render_sui_icon('heart', 'primary') }}
+    <pre>{% raw %}{{ render_ui_icon('heart', 'primary') }}{% endraw %}</pre>
+    Output: {{ render_ui_icon('heart', 'primary') }}
     <h2>Icon with custom size and Semantic color</h2>
-    <pre>{% raw %}{{ render_sui_icon('heart', 'primary') }}{% endraw %}</pre>
-    Output: {{ render_sui_icon('heart', 'primary') }}
+    <pre>{% raw %}{{ render_ui_icon('heart', 'primary') }}{% endraw %}</pre>
+    Output: {{ render_ui_icon('heart', 'primary') }}
     <h2>Icon with custom size and custom color</h2>
-    <pre>{% raw %}{{ render_sui_icon('heart', 'red') }}{% endraw %}</pre>
-    Output: {{ render_sui_icon('heart', 'red') }}
+    <pre>{% raw %}{{ render_ui_icon('heart', 'red') }}{% endraw %}</pre>
+    Output: {{ render_ui_icon('heart', 'red') }}
     <h2>Button example</h2>
     <button class="ui labeled primary icon button">
-        {{ render_sui_icon('pause') }}Pause
+        {{ render_ui_icon('pause') }}Pause
     </button>
     <button class="ui right labeled red icon button">
-        {{ render_sui_icon('right arrow') }}Next
+        {{ render_ui_icon('right arrow') }}Next
     </button>
     <div class="ui icon buttons">
-        <button class="ui button">{{ render_sui_icon('align left') }}</button>
-        <button class="ui button">{{ render_sui_icon('align center') }}</button>
-        <button class="ui button">{{ render_sui_icon('align right') }}</button>
-        <button class="ui button">{{ render_sui_icon('align justify') }}</button>
+        <button class="ui button">{{ render_ui_icon('align left') }}</button>
+        <button class="ui button">{{ render_ui_icon('align center') }}</button>
+        <button class="ui button">{{ render_ui_icon('align right') }}</button>
+        <button class="ui button">{{ render_ui_icon('align justify') }}</button>
     </div>
     <div class="ui icon buttons">
-        <button class="ui button">{{ render_sui_icon('bold') }}</button>
-        <button class="ui button">{{ render_sui_icon('underline') }}</button>
-        <button class="ui button">{{ render_sui_icon('text width') }}</button>
+        <button class="ui button">{{ render_ui_icon('bold') }}</button>
+        <button class="ui button">{{ render_ui_icon('underline') }}</button>
+        <button class="ui button">{{ render_ui_icon('text width') }}</button>
     </div>
     <h2>Button Social Example</h2>
     <button class="ui facebook button">
