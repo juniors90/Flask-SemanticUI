@@ -6,7 +6,6 @@ import sys
 from flask import (
     Flask,
     render_template,
-    render_template_string,
     request,
     flash,
     Markup,
@@ -204,7 +203,7 @@ def index():
 def test_form():
     form = HelloForm()
     return render_template(
-        "form.html",
+        "form_basic.html",
         form=form,
         telephone_form=TelephoneForm(),
         contact_form=ContactForm(),
@@ -219,10 +218,12 @@ def test_form_inline():
     form = RadioForm()
     return render_template("form_inline.html", form=form)
 
+
 @app.route("/form-inverted")
 def test_form_inverted():
     form = RadioForm()
     return render_template("form_inverted.html", form=form)
+
 
 @app.route("/form-inline-inverted")
 def test_form_inline_inverted():
