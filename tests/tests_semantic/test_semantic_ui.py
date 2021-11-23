@@ -58,17 +58,3 @@ class TestSemanticUI:
         assert semantic_css == rv
         assert semantic_css == CDN
         assert rv == CDN
-
-
-"""
-    def test_load_css_with_non_default_versions(self, semantic):
-        def _check_assertions(rv):
-            assert 'semantic.min.css' in rv
-            assert 'integrity="' not in rv
-            assert 'crossorigin="anonymous"' not in rv
-
-        rv = semantic.load_css(s_version='2.4.1')
-        _check_assertions(rv)
-        rv = semantic.load_css(s_version='2.4.2')
-        _check_assertions(rv)
-"""
