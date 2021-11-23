@@ -146,6 +146,29 @@ class ContactForm(FlaskForm):
     im_accounts = FieldList(FormField(IMForm), min_entries=2)
 
 
+class RadioForm(FlaskForm):
+    name = StringField("Name")
+    username = StringField(
+        "Username", validators=[DataRequired(), Length(1, 20)]
+    )
+    password = PasswordField(
+        "Password", validators=[DataRequired(), Length(8, 150)]
+    )
+    country_code = IntegerField("Country Code", validators=[DataRequired()])
+    radio_field = RadioField(
+        "This is a radio field",
+        choices=[
+            ("head_radio", "Head radio"),
+            ("radio_76fm", "Radio '76 FM"),
+            ("lips_106", "Lips 106"),
+            ("wctr", "WCTR"),
+        ],
+    )
+    hidden = HiddenField()
+    submit_button = SubmitField("Submit Form")
+    remember = BooleanField("Remember me")
+
+
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
@@ -189,6 +212,22 @@ def test_form():
         button_form=ButtonForm(),
         example_form=ExampleForm(),
     )
+
+
+@app.route("/form-inline")
+def test_form_inline():
+    form = RadioForm()
+    return render_template("form_inline.html", form=form)
+
+@app.route("/form-inverted")
+def test_form_inverted():
+    form = RadioForm()
+    return render_template("form_inverted.html", form=form)
+
+@app.route("/form-inline-inverted")
+def test_form_inline_inverted():
+    form = RadioForm()
+    return render_template("form_inline_inverted.html", form=form)
 
 
 @app.route("/nav", methods=["GET", "POST"])
@@ -347,43 +386,6 @@ def test():
 @app.route("/icon")
 def test_icon():
     return render_template("icon.html")
-
-
-class ChauForm(FlaskForm):
-    name = StringField("Name")
-    username = StringField(
-        "Username", validators=[DataRequired(), Length(1, 20)]
-    )
-    password = PasswordField(
-        "Password", validators=[DataRequired(), Length(8, 150)]
-    )
-    country_code = IntegerField("Country Code", validators=[DataRequired()])
-    radio_field = RadioField(
-        "This is a radio field",
-        choices=[
-            ("head_radio", "Head radio"),
-            ("radio_76fm", "Radio '76 FM"),
-            ("lips_106", "Lips 106"),
-            ("wctr", "WCTR"),
-        ],
-    )
-    hidden = HiddenField()
-    submit_button = SubmitField("Submit Form")
-    remember = BooleanField("Remember me")
-
-
-@app.route("/render_icon")
-def test_render_kw_class():
-    form = ChauForm()
-    return render_template_string(
-        """{% extends 'base.html' %}
-            {% from 'semantic/utils.html' import render_icon %}
-            {% block content %}
-            {{ render_icon('user', 'teal') }}
-            {% endblock %}
-            """,
-        form=form,
-    )
 
 
 if __name__ == "__main__":
