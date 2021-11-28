@@ -12,6 +12,7 @@ recursive-include flask_semantic *.svg
 recursive-include flask_semantic *.ttf
 recursive-include flask_semantic *.woff
 recursive-include flask_semantic *.woff2
+include CHANGELOG.rst
 
 
 exclude tox.ini
