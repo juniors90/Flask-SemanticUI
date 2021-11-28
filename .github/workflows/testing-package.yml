@@ -27,11 +27,8 @@ jobs:
     - name: Test with tox
       run: tox -r
     - name: "Upload coverage to Codecov"
-      env:
-        CODECOV_TOKEN: '0cdadafe-670d-4172-8e5d-a727e0b9905e'
       uses: codecov/codecov-action@v2
       with:
-        token: ${{secrets.CODECOV_TOKEN }}
         files: ./coverage.xml
         directory: ./coverage/reports/
         env_vars: OS,PYTHON
