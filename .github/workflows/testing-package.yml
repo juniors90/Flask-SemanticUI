@@ -27,6 +27,15 @@ jobs:
     - name: Test with tox
       run: tox -r
     - name: "Upload coverage to Codecov"
+      env:
+        CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN }}
       uses: codecov/codecov-action@v2
       with:
+        token: ${{secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
+        files: ./coverage.xml
+        directory: ./coverage/reports/
+        env_vars: OS,PYTHON
+        name: codecov-umbrella
+        fail_ci_if_error: false
+        verbose: true
