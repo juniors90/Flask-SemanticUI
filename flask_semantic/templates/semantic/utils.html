@@ -14,7 +14,7 @@
   'message': 'info',
   'success': 'info',
   'list': 'info'
-}, default_category=None, dismissible=False) -%}
+}, default_category=config.SEMANTIC_MSG_CATEGORY, dismissible=False) -%}
 
 <!-- Message flashing -->
 {% with messages = messages or get_flashed_messages(with_categories=true) %}
@@ -26,7 +26,7 @@
 			{% for category, message in messages %}
 				<div class="ui{% if category == 'debug' %} floating{% elif category in ['dark'] %} black{% elif category in ['critical','danger'] %} error{% else %} {{ category }}{% endif %} message">
 					{% if dismissible %}<i id="close-icon" class="close icon"></i>{% endif %}
-						<div class="header">{% if category in ['dark','danger','debug', 'light','critical', 'error', 'info','warning', 'success', 'secondary', 'primary'] %}{{ category.title() }} {% else %}Message{% endif %}</div>
+						<div class="header">{% if category in ['dark','danger','debug', 'light','critical', 'error', 'info','warning', 'success', 'secondary', 'primary'] %}{{ category.title() }}: {{title}}{% else %}{{title}}{% endif %}</div>
 							{% if category == 'list' %}
 							    {% for msg in message %}
 							        <ul class="list">

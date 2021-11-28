@@ -9,7 +9,12 @@ Welcome to Flask-SemanticUI's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   
+   notes/basic
+   notes/macros
+   notes/changelog
+   notes/advanced
+   
    modules/modules
 
 Indices and tables

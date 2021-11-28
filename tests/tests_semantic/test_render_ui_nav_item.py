@@ -40,10 +40,8 @@ def test_render_render_ui_nav_item_active(app, client):
     @app.route("/not_active")
     def bar():
         return render_template_string(
-            """
-                {% from 'semantic/nav.html' import render_ui_nav_item %}
-                {{ render_ui_nav_item('foo', 'Foo') }}
-                """
+            """{% from 'semantic/nav.html' import render_ui_nav_item %}
+               {{ render_ui_nav_item('foo', 'Foo') }}"""
         )
 
     response = client.get("/not_active")
@@ -57,7 +55,7 @@ def test_render_render_ui_nav_item_active(app, client):
             {% from 'semantic/nav.html' import render_ui_nav_item %}
             {{ render_ui_nav_item('color',
                                   'Color',
-                                  icon='envelope',
+                                  iname='envelope',
                                   color='teal') }}
             """
         )

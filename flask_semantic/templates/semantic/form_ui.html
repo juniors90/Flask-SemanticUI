@@ -244,9 +244,9 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
 {%- endmacro %}
 
 {% macro render_ui_field_row(fields,
-    row_class={"numbers":["one","two","three","four","five","six", "seven", "eight", "nine", "ten"]}
+    row_class={"number":["one","two","three","four","five","six", "seven", "eight", "nine", "ten"]}
     ) %}
-<div class="{{row_class["numbers"][fields|length - 1]}} fields">
+<div class="{{row_class["number"][fields|length - 1]}} fields">
   {% for field in fields %}
       {{ render_ui_field(field) }}
   {% endfor %}

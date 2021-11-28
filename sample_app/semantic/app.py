@@ -9,6 +9,7 @@ from flask import (
     request,
     flash,
     Markup,
+    render_template_string,
 )
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import (
@@ -369,19 +370,25 @@ class Msg(db.Model):
     text = db.Column(db.Text)
 
 
-@app.route("/testtable")
-def test():
-    db.drop_all()
-    db.create_all()
-    for i in range(10):
-        m = Msg(text=f"Test message {i+1}")
-        db.session.add(m)
-    db.session.commit()
-    page = request.args.get("page", 1, type=int)
-    pagination = Msg.query.paginate(page, per_page=10)
-    messages = pagination.items
-    titles = [("id", "#"), ("text", "Message")]
-    return render_template("testtable.html", titles=titles, messages=messages)
+@app.route("/test-render-field")
+def test_field():
+    form = HelloForm()
+    return render_template_string(
+        """
+        {% extends 'base.html' %}
+        {% from 'semantic/form_ui.html' import render_ui_field,
+                                               render_ui_hidden_errors %}
+        {% block content %}
+        <h1 class="ui center">Flask Semantic UI 2.4.2 - Demo Application</h1>
+        <h2>This is the sample inline form</h2>
+            <form class="ui form error" method="post">
+                {{ form.hidden_tag() }}
+                {{ render_ui_hidden_errors(form) }}
+                {{ render_ui_field(form.username) }}
+                {{ render_ui_field(form.password) }}
+                {{ render_ui_field(form.submit) }}
+            </form>
+        {% endblock %}""", form=form)
 
 
 @app.route("/icon")
