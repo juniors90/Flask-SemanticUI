@@ -17,12 +17,12 @@
 	{% endif %}
 {% endmacro %}
 
-{% macro render_ui_breadcrumb_item(endpoint, text, icon=None) %}
+{% macro render_ui_breadcrumb_item(endpoint, text, icon='right chevron') %}
 {% set active = True if request.endpoint and request.endpoint == endpoint else False %}
         {% if active %}
             <a class="active section">{{ text }}</a>
         {% else %}
             <a class="section" href="{{ url_for(endpoint, **kwargs) }}">{{ text }}</a>
         {% endif %}
-            <i class="{% if icon %}{{icon}}{% else %}right chevron{% endif %} icon divider"></i>
+            <i class="{{icon}} icon divider"></i>
 {% endmacro %}

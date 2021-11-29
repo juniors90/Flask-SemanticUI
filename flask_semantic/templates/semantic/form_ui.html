@@ -6,16 +6,19 @@
 
 {% macro render_ui_hidden_errors(form, hiddens=True) %}
   {%- if form.errors %}
+    <div class="ui error message">
+        <div class="header">Action Forbidden</div>
     {%- for fieldname, errors in form.errors.items() %}
-      {%- if semantic_is_hidden_field(form[fieldname]) %}
-          <div class="ui error message">
-            <div class="header">Action Forbidden</div>
-            {%- for error in errors %}
-              <p>{{error}}</p>
-            {%- endfor %}
-          </div>
+      {%- if semantic_is_hidden_field(form[fieldname]) and hiddens or
+        not semantic_is_hidden_field(form[fieldname]) and hiddens != 'only' %}
+            <ul class="list">
+                {%- for error in errors %}
+                    <li>{{error}}</li>
+                {%- endfor %}
+            </ul>
       {%- endif %}
     {%- endfor %}
+    </div>
   {%- endif %}
 {%- endmacro %}
 
@@ -53,7 +56,21 @@ the necessary fix for required=False attributes, but will also not set the requi
     {% endif %}
     {% set extra_classes = render_kw_class + class %}
 
-    {% if field.widget.input_type == 'checkbox' %}
+    {% if field.type in ["StringField", 'PasswordField'] %}
+        {% set field_kwargs = kwargs %}
+        {% if form_type == "inline" %}<div class="inline fields">{%endif%}
+            <div class="{% if form_type == "inline" %}{{horizontal_columns[0]}} wide {%endif%}field{% if field.errors %} error{%endif%}{%- if field.flags.required %} required{% endif -%}">  
+                {{ field.label(for=field.id)|safe }}              
+                {{ field(class="%s" % extra_classes, **field_kwargs)|safe }}
+            </div>
+            {% if field.description -%}
+                <ul class="list">
+                    <li>{{ field.description|safe }}</li>
+                </ul>
+            {%- endif %}
+        {% if form_type == "inline" %}</div>{%endif%}
+        
+    {%- elif field.widget.input_type == 'checkbox' %}
         {% set field_kwargs = kwargs %}
         {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required) %}
             <div class="ui field">
@@ -217,14 +234,13 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
     <form{%- if action != None %} action="{{ action }}"{% endif -%}
             {%- if id %} id="{{ id }}"{% endif -%}
             {%- if method %} method="{{ method }}"{% endif %}
-            class="ui form
+            class="ui form error
 {%- if extra_classes %} {{ extra_classes }}{% endif -%}{%- if form_type == "inline" %} inline{% endif -%}"
             {%- if _enctype[0] %} enctype="{{ _enctype[0] }}"{% endif -%}
             {%- if role %} role="{{ role }}"{% endif -%}
             {%- if novalidate %} novalidate{% endif -%}
             {%- if render_kw %} {{ render_kw|xmlattr }}{% endif -%}>
         {{ form.hidden_tag() }}
-        {{ render_ui_hidden_errors(form) }}
         {%- if form_title != None %}
             <h4 class="ui dividing header {%- if extra_classes %} {{extra_classes}}{% endif -%}">
                 {{form_title}}
@@ -240,6 +256,7 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
                     button_size=button_size) }}
             {%- endif %}
         {%- endfor %}
+        {{ render_ui_hidden_errors(form) }}
     </form>
 {%- endmacro %}
 

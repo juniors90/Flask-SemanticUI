@@ -108,10 +108,21 @@ class ExampleForm(FlaskForm):
 
 class HelloForm(FlaskForm):
     username = StringField(
-        "Username", validators=[DataRequired(), Length(1, 20)]
+        "Username",
+        description="esta es una descripción",
+        validators=[
+            DataRequired(),
+            Length(min=4, max=10, message="longitud de Username no válida"),
+        ],
     )
     password = PasswordField(
-        "Password", validators=[DataRequired(), Length(8, 150)]
+        "Password",
+        validators=[
+            DataRequired(),
+            Length(
+                min=6, max=10, message="The lengtt of password is not validate"
+            ),
+        ],
     )
     submit = SubmitField()
     remember = BooleanField("Remember me")
@@ -216,19 +227,22 @@ def test_form():
 
 @app.route("/form-inline")
 def test_form_inline():
-    form = RadioForm()
+    form = HelloForm()
     return render_template("form_inline.html", form=form)
 
 
 @app.route("/form-inverted")
 def test_form_inverted():
-    form = RadioForm()
+    form = HelloForm()
     return render_template("form_inverted.html", form=form)
 
 
-@app.route("/form-inline-inverted")
+@app.route("/form-inline-inverted", methods=["GET", "POST"])
 def test_form_inline_inverted():
-    form = RadioForm()
+    form = HelloForm()
+    if form.validate_on_submit():
+        data = request.form.to_dict()
+        print(data)
     return render_template("form_inline_inverted.html", form=form)
 
 
@@ -388,7 +402,9 @@ def test_field():
                 {{ render_ui_field(form.password) }}
                 {{ render_ui_field(form.submit) }}
             </form>
-        {% endblock %}""", form=form)
+        {% endblock %}""",
+        form=form,
+    )
 
 
 @app.route("/icon")

@@ -10,46 +10,66 @@ Button Style
 ~~~~~~~~~~~~
 
 When you use form related macros, you have a couple ways to style buttons. Before we start to dive into the solutions, let's
-review some Semantic basics: In Semantic, you have 9 normal button style and 8 outline button style, so you have 17 button
-style classes below:
+review some Semantic basics: In Semantic, you have 17 basic button style and 16 inverted button style, so you have 16 inverted+basic
+button style classes:
 
-- primary
-- secondary
-- success
-- danger
-- warning
-- info
-- light
-- dark
-- link
-- primary
-- secondary
-- success
-- danger
-- warning
-- info
-- light
-- dark
+**Basic:** A basic button is less pronounced
 
-Remove the ``ui`` prefix, you will get what we (actually, I) called "Semantic button style name":
+- primary basic
+- secondary basic
+- positive basic
+- negative basic
+- red basic
+- orange basic
+- yellow basic
+- olive basic
+- green basic
+- teal basic
+- blue basic
+- violet basic
+- purple basic
+- pink basic
+- brown basic
+- grey basic
+- black basic
 
-- primary
-- secondary
-- success
-- danger
-- warning
-- info
-- light
-- dark
-- link
-- primary
-- secondary
-- success
-- danger
-- warning
-- info
-- light
-- dark
+**Inverted:** A button can be formatted to appear on dark backgrounds
+
+- inverted
+- inverted primary
+- inverted secondary
+- inverted red
+- inverted orange
+- inverted yellow
+- inverted olive
+- inverted green
+- inverted teal
+- inverted blue
+- inverted violet
+- inverted purple
+- inverted pink
+- inverted brown
+- inverted grey
+- inverted black
+
+**Inverted + basic:** Combine two styles.
+
+- inverted basic
+- inverted primary basic
+- inverted secondary basic
+- inverted red basic
+- inverted orange basic
+- inverted yellow basic
+- inverted olive basic
+- inverted green basic
+- inverted teal basic
+- inverted blue basic
+- inverted violet basic
+- inverted purple basic
+- inverted pink basic
+- inverted brown basic
+- inverted grey basic
+- inverted black basic
 
 You will use these names in Flask-SemanticUI. First, you configuration variables ``SEMANTIC_BUTTON_STYLE`` to set a global form button style:
 
@@ -61,7 +81,7 @@ You will use these names in Flask-SemanticUI. First, you configuration variables
     app = Flask(__name__)
     semantic = SemanticUI(app)
 
-    app.config['SEMANTIC_BUTTON_STYLE'] = 'primary'  # default to 'secondary'
+    app.config['SEMANTIC_BUTTON_STYLE'] = 'inverted black basic'  # default to 'primary'
 
 
 Or you can use ``button_style`` parameter when using ``render_ui_form``, ``render_ui_field`` and ``render_ui_form_row``, this parameter will overwrite
@@ -71,21 +91,32 @@ Or you can use ``button_style`` parameter when using ``render_ui_form``, ``rende
 
     {% from 'semantic/form.html' import render_ui_form %}
 
-    {{ render_ui_form(form, button_style='success') }}
+    {{ render_ui_form(form, button_style='positive basic') }}
 
-Similarly, you can use this way to control the button size. In Semantic, buttons can have 4 sizes:
+Button Size
+~~~~~~~~~~~~
 
-- sm
-- md (the default size)
-- lg
-- block
+Similarly, you can use this way to control the button size. In Semantic UI, buttons can have 8 sizes:
 
-So, the size names used in Flask-SemanticUI will be:
+- mini
+- tiny
+- small 
+- medium
+- large
+- big
+- huge 
+- massive
 
-- sm
-- md (the default size)
-- lg
-- block
+So, the size names used in Flask-Semantic UI will be:
+
+- mini
+- tiny
+- small 
+- medium
+- large
+- big
+- huge 
+- massive
 
 Now you can use a configuration variable called ``SEMANTIC_BUTTON_STYLE`` to set global form button size:
 
@@ -97,7 +128,7 @@ Now you can use a configuration variable called ``SEMANTIC_BUTTON_STYLE`` to set
     app = Flask(__name__)
     semantic = Semantic(app)
 
-    app.config['SEMANTIC_BUTTON_SIZE'] = 'sm'  # default to 'md'
+    app.config['SEMANTIC_BUTTON_SIZE'] = 'small'  # default to ''
 
 there also a parameter called ``button_size`` in form related macros (it will overwrite ``SEMANTIC_BUTTON_SIZE``):
 
@@ -105,22 +136,17 @@ there also a parameter called ``button_size`` in form related macros (it will ov
 
     {% from 'semantic/form.html' import render_ui_form %}
 
-    {{ render_ui_form(form, button_size='lg') }}
+    {{ render_ui_form(form, button_size='big') }}
 
-if you need a **block level small** button (``btn sm block``), you can just do something hacky like this:
-
-.. code-block:: python
-
-    app.config['SEMANTIC_BUTTON_SIZE'] = 'sm block'
 
 What if I have three buttons in one form, and I want they have different styles and sizes? The answer is ``button_map`` parameter in form related macros.
-``button_map`` is a dictionary that mapping button field name to Semantic button style names. For example, ``{'submit': 'success'}``.
+``button_map`` is a dictionary that mapping button field name to Semantic button style names. For example, ``{'submit': 'positive basic'}``.
 Here is a more complicate example:
 
 .. code-block:: jinja
 
     {% from 'semantic/form.html' import render_ui_form %}
 
-    {{ render_ui_form(form, button_map={'submit': 'success', 'cancel': 'secondary', 'delete': 'danger'}) }}
+    {{ render_ui_form(form, button_map={'submit': 'primary', 'cancel': 'orange', 'delete': 'negative'}) }}
 
 It will overwrite ``button_style`` and ``SEMANTIC_BUTTON_STYLE``.

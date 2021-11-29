@@ -24,11 +24,11 @@ Example
 API
 ~~~~
 
-.. py:function:: render_ui_nav_item(endpoint, text, badge='', use_li=False, **kwargs)
+.. py:function:: render_ui_nav_item(endpoint, text, iname, color=False, **kwargs)
 
-    :param endpoint: The endpoint used to generate ``URL``..
+    :param endpoint: The endpoint used to generate ``URL``.
     :param text: The text that will displayed on the item.
-    :param iname: Icon name.
+    :param iname: The icon name.
     :param color: Default: ``None``.
     :param kwargs: Additional keyword arguments pass to ``url_for()``.
 
@@ -36,7 +36,7 @@ API
 render_ui_breadcrumb_item()
 ----------------------------
 
-Render a Semantic breadcrumb item.
+Render a Semantic UI breadcrumb item.
 
 Example
 ~~~~~~~~
@@ -59,6 +59,7 @@ API
 
     :param endpoint: The endpoint used to generate ``URL``.
     :param text: The text that will displayed on the item.
+    :param icon: Te icon name. Default: ``right chevron``.
     :param kwargs: Additional keyword arguments pass to ``url_for()``.
 
 render_ui_field()
@@ -79,7 +80,7 @@ Example
         {{ render_ui_field(form.submit) }}
     </form>
 
-You can pass any HTTP attributes as extra keyword arguements like ``class`` or ``placeholder``:
+You can pass extra keyword arguements like ``class`` or ``placeholder`` for each HTML element:
 
 .. code-block:: jinja
 
@@ -108,19 +109,21 @@ API
                                  button_map={})
 
     :param field: The form field (attribute) to render.
-    :param form_type: One of ``basic``, ``inline`` or ``horizontal``. See the
+    :param form_type: One of ``basic`` or ``inline``. See the
                      Semantic docs for details on different form layouts.
-    :param horizontal_columns: When using the horizontal layout, layout forms
-                              like this. Must be a 3-tuple of ``(column-type,
-                              left-column-size, right-column-size)``.
+    :param horizontal_columns: *TODO in new relases:* (When using the horizontal layout, layout forms
+                              like this. Must be a 3-tuple of ``(column-wide-mobile,
+                              column-wide-tablet, column-wide-computer)``).
+    :param button_map: It given by ``button_map.get(field.name, button_style)``. See :ref:`button_customization` to
+                       learn how to customize form buttons.
     :param button_style: Set button style for ``SubmitField``. Accept Semantic button style name (i.e. primary, 
-                         secondary, outline-success, etc.), default to ``primary`` (e.g. ``btn-primary``). This will
+                         secondary, success, etc.), default to ``primary`` (e.g. ``ui primary``). This will
                          overwrite config ``SEMANTIC_BUTTON_STYLE``.
-    :param button_size: Set button size for ``SubmitField``. Accept Semantic button size name: sm, md, lg, block,
-                        default to ``md``. This will overwrite config ``SEMANTIC_BUTTON_SIZE``.
+    :param button_size: Set button size for ``SubmitField``. Accept `Semantic UI button <https://semantic-ui.com/elements/button.html>`_
+                        size name: ``mini``, ``tiny``, ``small``, ``medium``, ``large``, ``big``, ``huge``, ``massive``
+                        default to ``""``. This will overwrite config ``SEMANTIC_BUTTON_SIZE``.
 
-..
-    tip:: See :ref:`button_customization` to learn how to customize form buttons.
+.. tip:: See :ref:`button_customization` to learn how to customize form buttons.
 
 render_ui_form()
 ----------------

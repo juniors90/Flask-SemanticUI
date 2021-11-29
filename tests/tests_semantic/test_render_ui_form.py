@@ -33,8 +33,8 @@ def test_render_ui_form(app, client, example_form):
         form = example_form()
         return render_template_string(
             """
-                {% import "semantic/form_ui.html" as wtf %}
-                {{ wtf.render_ui_form(form,
+                {% from "semantic/form_ui.html" import render_ui_form %}
+                {{ render_ui_form(form,
                                   form_title='Title for Shipping Information',
                                   extra_classes='inverted',
                                   form_type='inverted',
@@ -63,8 +63,8 @@ def test_form_description_for_textfield(app, client):
         form = TestForm()
         return render_template_string(
             """
-                    {% import "semantic/form_ui.html" as wtf %}
-                    {{ wtf.render_ui_form(form,
+                    {% from "semantic/form_ui.html" import render_ui_form %}
+                    {{ render_ui_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
                     """,
@@ -74,7 +74,7 @@ def test_form_description_for_textfield(app, client):
     response = client.get("/description")
     data = response.get_data(as_text=True)
     assert "Title for Shipping Information" in data
-    assert "<p>This is field one.</p>" in data
+    assert "<li>This is field one.</li>" in data
     assert (
         '<input class="" id="field1" name="field1" type="text" value="">'
         in data
@@ -96,8 +96,8 @@ def test_render_ui_form_enctype(app, client):
         form = SingleUploadForm()
         return render_template_string(
             """
-            {% import "semantic/form_ui.html" as wtf %}
-            {{ wtf.render_ui_form(form,
+            {% from "semantic/form_ui.html" import render_ui_form %}
+            {{ render_ui_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
         """,
@@ -109,8 +109,8 @@ def test_render_ui_form_enctype(app, client):
         form = MultiUploadForm()
         return render_template_string(
             """
-            {% import "semantic/form_ui.html" as wtf %}
-            {{ wtf.render_ui_form(form,
+            {% from "semantic/form_ui.html" import render_ui_form %}
+            {{ render_ui_form(form,
                                 form_title='Title for Shipping Information',
                                 button_map={'submit_button': 'primary'}) }}
         """,
@@ -142,10 +142,14 @@ def test_form_render_kw_class(app, client):
         form = LoginForm()
         return render_template_string(
             """
-            {% import "semantic/form_ui.html" as wtf %}
-            {{ wtf.render_ui_form(form,
-                form_title='Title for Shipping Information',
-                button_map={'submit_button': 'my-class-customs'}) }}
+            {% from "semantic/form_ui.html" import render_ui_form %}
+            {% for c in ['my-custom-class',
+                         'inverted primary basic',
+                         'inverted secondary basic']%}
+                {{ render_ui_form(form,
+                                  form_title='Title for Shipping Information',
+                                  button_map={'submit_button': c }) }}
+            {% endfor %}
             """,
             form=form,
         )
@@ -156,7 +160,11 @@ def test_form_render_kw_class(app, client):
     assert "button" in data
     assert 'class="my-password-class"' in data
     assert "class-not-found" not in data
-    assert 'class=" ui my-class-customs button my-awesome-class"' in data
+    assert 'class=" ui my-custom-class button my-awesome-class"' in data
+    assert 'class=" ui inverted primary basic button my-awesome-class"' in data
+    assert (
+        'class=" ui inverted secondary basic button my-awesome-class"' in data
+    )
 
 
 def test_button_size(app, client, hello_form):

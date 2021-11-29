@@ -111,10 +111,7 @@ class _SemanticUI(object):
         # default settings
         app.config.setdefault("SEMANTIC_SERVE_LOCAL", False)
         app.config.setdefault("SEMANTIC_BUTTON_STYLE", "primary")
-        app.config.setdefault("SEMANTIC_BUTTON_SUBMIT_STYLE", "default")
         app.config.setdefault("SEMANTIC_BUTTON_SIZE", "")
-        app.config.setdefault("SEMANTIC_BUTTON_SUBMIT_SIZE", None)
-        app.config.setdefault("SEMANTIC_ICON_TYPE", None)
         app.config.setdefault("SEMANTIC_ICON_COLOR", None)
         app.config.setdefault("SEMANTIC_ICON_SIZE", None)
         app.config.setdefault(
@@ -127,7 +124,6 @@ class _SemanticUI(object):
         if not hasattr(app, "extensions"):
             app.extensions = {}
         app.extensions["semantic"] = self
-
         blueprint = Blueprint(
             "semantic",
             __name__,

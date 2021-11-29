@@ -6,6 +6,11 @@
 Welcome to Flask-SemanticUI's documentation!
 ============================================
 
+
+.. image:: https://codecov.io/gh/juniors90/Flask-SemanticUI/branch/main/graph/badge.svg?token=V03GVOHP77
+   :target: https://codecov.io/gh/juniors90/Flask-SemanticUI
+    
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

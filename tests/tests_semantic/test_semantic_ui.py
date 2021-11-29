@@ -58,3 +58,20 @@ class TestSemanticUI:
         assert semantic_css == rv
         assert semantic_css == CDN
         assert rv == CDN
+
+
+def test_semantic_get_sri(app, semantic):
+    with app.app_context():
+        app.config["SEMANTIC_SERVE_LOCAL"] = True
+        assert (
+            semantic._get_sri(
+                name="semantic_js",
+                version="2.4.2",
+                sri="sha256-CgSoWC9w5wNmI1aN8dIMK+6DPelUEtvDr+Bc2m/0Nx8=",
+            )
+            == "sha256-CgSoWC9w5wNmI1aN8dIMK+6DPelUEtvDr+Bc2m/0Nx8="
+        )
+        assert (
+            semantic._get_sri(name="semantic_js", version="2.4.2", sri=None)
+            is None
+        )
