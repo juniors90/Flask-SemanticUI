@@ -16,6 +16,7 @@ include CHANGELOG.rst
 
 
 exclude tox.ini
+exclude .docstr.yaml
 exclude pyproject.toml
 exclude *.model 
 recursive-exclude tests *
