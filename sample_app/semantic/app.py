@@ -72,7 +72,7 @@ class ExampleForm(FlaskForm):
         description="We'll never share your email with anyone else."
     )  # add help text with `description`
     datetime = DateTimeField(
-        render_kw={"placeholder": "this is placeholder"}
+        render_kw={"placeholder": "this is a placeholder"}
     )  # add HTML attribute with `render_kw`
     image = FileField(render_kw={"class": "my-class"})  # add your class
     option = RadioField(
