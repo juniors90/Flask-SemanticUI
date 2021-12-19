@@ -15,9 +15,9 @@
 
 import re
 
-import pytest as pt
-
 from flask_semantic import SemanticUI
+
+import pytest as pt
 
 
 @pt.fixture(autouse=True)

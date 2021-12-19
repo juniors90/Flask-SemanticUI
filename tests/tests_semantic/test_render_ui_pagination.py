@@ -21,6 +21,7 @@
 # =====================================================================
 
 from flask import render_template_string, request
+
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -28,7 +29,7 @@ def test_render_ui_pagination(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(db.Integer, primary_key=True)  # noqa: A003
 
     @app.route("/pagination")
     def test():
@@ -68,7 +69,7 @@ def test_render_ui_pagination_extra_class(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(db.Integer, primary_key=True)  # noqa: A003
 
     @app.route("/pagination")
     def test():
@@ -110,7 +111,7 @@ def test_render_ui_pagination_extra_class_and_color_item(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(db.Integer, primary_key=True)  # noqa: A003
 
     @app.route("/pagination")
     def test():

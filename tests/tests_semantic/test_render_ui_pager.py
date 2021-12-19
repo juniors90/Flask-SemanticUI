@@ -21,6 +21,7 @@
 # =====================================================================
 
 from flask import render_template_string, request
+
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -28,7 +29,7 @@ def test_render_pager(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(db.Integer, primary_key=True)  # noqa: A003
 
     @app.route("/pager")
     def test():

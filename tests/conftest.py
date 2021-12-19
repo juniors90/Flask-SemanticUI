@@ -13,21 +13,25 @@
 # License: MIT
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
+import typing as t
+
 import flask
 from flask import render_template_string
+
 from flask_wtf import FlaskForm
+
+import pytest as pt
+
 from wtforms import (
     BooleanField,
+    HiddenField,
+    IntegerField,
     PasswordField,
+    RadioField,
     StringField,
     SubmitField,
-    HiddenField,
-    RadioField,
-    IntegerField,
 )
 from wtforms.validators import DataRequired, Length
-import pytest as pt
-import typing as t
 
 
 class ExampleForm(FlaskForm):

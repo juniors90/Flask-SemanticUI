@@ -22,16 +22,6 @@
   {%- endif %}
 {%- endmacro %}
 
-{% macro _hz_form_wrap(horizontal_columns, form_type, add_group=False, required=False) %}
-{% if form_type == "horizontal" %}
-    {% if add_group %}{% endif %}
-{% endif %}
-{{ caller() }}
-{% if form_type == "horizontal" %}
-    {% if add_group %}{% endif %}
-{% endif %}
-{% endmacro %}
-
 {% macro render_ui_field(field,
                     form_type="basic",
                     horizontal_columns=('sixteen', 'sixteen', 'sixteen'),
@@ -56,30 +46,17 @@
     {% endif %}
     {% set extra_classes = render_kw_class + class %}
 
-    {% if field.type in ["StringField", 'PasswordField'] %}
+    {% if field.widget.input_type == 'checkbox' %}
         {% set field_kwargs = kwargs %}
-        {% if form_type == "inline" %}<div class="inline fields">{%endif%}
-            <div class="{% if form_type == "inline" %}{{horizontal_columns[0]}} wide {%endif%}field{% if field.errors %} error{%endif%}{%- if field.flags.required %} required{% endif -%}">  
-                {{ field.label(for=field.id)|safe }}              
-                {{ field(class="%s" % extra_classes, **field_kwargs)|safe }}
-            </div>
-            {% if field.description -%}
-                <ul class="list">
-                    <li>{{ field.description|safe }}</li>
-                </ul>
-            {%- endif %}
-        {% if form_type == "inline" %}</div>{%endif%}
-        
-    {%- elif field.widget.input_type == 'checkbox' %}
-        {% set field_kwargs = kwargs %}
-        {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required) %}
             <div class="ui field">
                 <div class="ui checkbox">
                     {{ field(class="%s" % extra_classes, **field_kwargs)|safe }}
                     {{ field.label(for=field.id)|safe }}
                 </div>
+                {% if field.description -%}
+                    <small style="margin-left:0.1in; font-size: small;">{{ field.description|safe }}</small>
+                {%- endif %}
             </div>
-        {% endcall %}
         {%- if field.errors %}
             {%- for error in field.errors %}
                 <div class="ui error message">
@@ -87,22 +64,27 @@
                     <p>{{error}}</p>
                 </div>
             {%- endfor %}
-        {%- elif field.description -%}
-            <div class="ui teal message">
-                <p>{{field.description|safe}}</p>
-            </div>
         {%- endif %}
     {%- elif field.type == 'RadioField' -%}
         {# note: A cleaner solution would be rendering depending on the widget,
         this is just a hack for now, until I can think of something better #}
         <div class="{% if form_type == "inline" %}inline{%else%}grouped{% endif %}{% if extra_classes %} {{ extra_classes }}{% endif %} fields">
-            {{field.label(style="color: #FFFFFF;")|safe}}
+            
+            {%- if extra_classes == 'inverted' %}
+                {{field.label(style="color: #FFFFFF;")|safe}}
+            {%- else -%}
+                {{field.label()|safe}}
+            {%- endif %}
+            
             {% for item in field -%}
                 <div class="field">
                     <div class="ui radio checkbox">
                         {{item(**kwargs)|safe}}
                         {{item.label(for=item.id)|safe}}
                     </div>
+                    {% if field.description -%}
+                        <small style="margin-left:0.1in; font-size: small;">{{ field.description|safe }}</small>
+                    {%- endif %}
                 </div>
             {% endfor %}
         </div>
@@ -113,20 +95,14 @@
                     <p>{{error}}</p>
                 </div>
             {%- endfor %}
-        {%- elif field.description -%}
-          <div class="ui teal message">
-              <p>{{field.description|safe}}</p>
-          </div>
         {%- endif %}
     {%- elif field.type == 'SubmitField' -%}
         {# deal with jinja scoping issues? #}
         {% set field_kwargs = kwargs %}
         {# note: same issue as above - should check widget, not field type #}
-        {% call _hz_form_wrap(horizontal_columns, form_type, True, required=required) %}
             {% set default_button_style = button_style or config.SEMANTIC_BUTTON_STYLE %}
             {% set default_button_size = button_size or config.SEMANTIC_BUTTON_SIZE %}
             {{ field(class='%s ui %s button %s' % (default_button_size, button_map.get(field.name, default_button_style), extra_classes), **field_kwargs) }}
-        {% endcall %}
     {%- elif field.type in ['CSRFTokenField', 'HiddenField'] -%}
         {{ field()|safe }}
     {%- elif field.type in ['FormField', 'FieldList'] -%}
@@ -154,6 +130,9 @@
           {% else %}
             {{field(class="%s" % extra_classes, **kwargs)|safe}}
           {% endif %}
+          {% if field.description -%}
+                    <small style="margin-left:0.1in; font-size: small;">{{ field.description|safe }}</small>
+          {%- endif %}
       {%- else -%}
           {{field.label|safe}}
           {% if field.type == 'FileField' %}
@@ -161,6 +140,9 @@
           {% else %}
             {{field(class="%s" % extra_classes, **kwargs)|safe}}
           {% endif %}
+          {% if field.description -%}
+              <small style="margin-left:0.1in; font-size: small;">{{ field.description|safe }}</small>
+          {%- endif %}
         {%- if field.errors %}
           {%- for error in field.errors %}
             <div class="ui error message">
@@ -168,10 +150,6 @@
               <p>{{error}}</p>
             </div>
           {%- endfor %}
-        {%- elif field.description -%}
-          <div class="ui teal message">
-              <p>{{field.description|safe}}</p>
-          </div>
         {%- endif %}
       {%- endif %}
   </div>
@@ -261,11 +239,23 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
 {%- endmacro %}
 
 {% macro render_ui_field_row(fields,
-    row_class={"number":["one","two","three","four","five","six", "seven", "eight", "nine", "ten"]}
-    ) %}
-<div class="{{row_class["number"][fields|length - 1]}} fields">
-  {% for field in fields %}
-      {{ render_ui_field(field) }}
-  {% endfor %}
-</div>
+                             row_class={
+                                "number":[
+                                            "one",
+                                            "two",
+                                            "three",
+                                            "four",
+                                            "five",
+                                            "six",
+                                            "seven",
+                                            "eight",
+                                            "nine",
+                                            "ten"
+                                        ]
+                                    }) %}
+    <div class="{{row_class["number"][fields|length - 1]}} fields">
+        {% for field in fields %}
+            {{ render_ui_field(field) }}
+        {% endfor %}
+    </div>
 {% endmacro %}

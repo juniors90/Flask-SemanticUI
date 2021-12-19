@@ -14,7 +14,9 @@
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
 from flask import render_template_string
+
 from flask_wtf import FlaskForm
+
 from wtforms import HiddenField, SubmitField
 from wtforms.validators import DataRequired
 

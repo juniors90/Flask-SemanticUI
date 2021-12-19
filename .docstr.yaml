@@ -1,7 +1,14 @@
+## This file was part of docstr-cov-workflow and was modified under the terms of
+## its MIT License. Copyright (c) 2021 Ezequiel Pássaro. All rights reserved.
+## Full text:
+##  -https://github.com/epassaro/docstr-cov-workflow/blob/main/LICENSE
+## Links:
+##  - https://dev.to/epassaro/how-to-keep-track-of-docstring-coverage-of-python-packages-on-ci-41fc
+
 paths:
   - flask_semantic
 #badge: docs
-#exclude: .*/test # regex
+exclude: .*/tests # regex
 verbose: 2 # int (0-3)
 skip_magic: True
 skip_file_doc: True
@@ -10,7 +17,7 @@ skip_class_def: False
 skip_private: True
 follow_links: True
 #ignore_names_file: .*/test # regex
-#fail_under: 90
+# fail_under: 90
 percentage_only: False
 #ignore_patterns: # Dict with key/value pairs of file-pattern/node-pattern
 #  .*: method_to_ignore_in_all_files

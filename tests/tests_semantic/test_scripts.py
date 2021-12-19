@@ -14,10 +14,10 @@
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
 from flask_semantic import (
-    simple_link_css,
     link_css_with_sri,
-    simple_scripts_js,
     scripts_with_sri,
+    simple_link_css,
+    simple_scripts_js,
 )
 
 

@@ -13,16 +13,18 @@
 # License: MIT
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
-from flask import render_template_string, current_app
+from flask import current_app, render_template_string
+
 from flask_wtf import FlaskForm
+
 from wtforms import (
     BooleanField,
     FileField,
     MultipleFileField,
     PasswordField,
+    RadioField,
     StringField,
     SubmitField,
-    RadioField,
 )
 from wtforms.validators import DataRequired
 
@@ -74,7 +76,11 @@ def test_form_description_for_textfield(app, client):
     response = client.get("/description")
     data = response.get_data(as_text=True)
     assert "Title for Shipping Information" in data
-    assert "<li>This is field one.</li>" in data
+    assert (
+        '<small style="margin-left:0.1in; font-size: small;">'
+        + "This is field one.</small>"
+        in data
+    )
     assert (
         '<input class="" id="field1" name="field1" type="text" value="">'
         in data

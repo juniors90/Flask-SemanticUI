@@ -15,13 +15,11 @@ import os
 import pathlib
 import sys
 
-
 # this path is pointing to project/docs/source
 CURRENT_PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 FLASK_SEMANTIC_PATH = CURRENT_PATH.parent.parent
 
 sys.path.insert(0, str(FLASK_SEMANTIC_PATH))
-
 
 import flask_semantic
 
@@ -93,3 +91,5 @@ autodoc_default_options = {
 }
 
 add_module_names = False
+
+master_doc = 'index'

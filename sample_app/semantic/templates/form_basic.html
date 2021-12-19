@@ -7,7 +7,7 @@ content %}
   <h2>This is the sample form (basic)</h2>
   {{ render_ui_form(form, form_title='Title for Shipping Information',
   button_map={'submit_button': 'primary'}) }}
-  <h2>This is the sample form (basic)</h2>
+  <h2>This is the sample form (inline basic)</h2>
   {{ render_ui_form(form, form_title='Title for Shipping Information',
   form_type='inline', button_map={'submit_button': 'primary'}) }}
   <h2>And as a vertical inverted form</h2>
@@ -18,7 +18,7 @@ content %}
   <h2>The same form, inline inverted form</h2>
   <div class="ui inverted segment">
     {{ render_ui_form(form, form_title='Title for Shipping Information',
-    form_type='inline',horizontal_columns=('eigth', 'sixteen', 'sixteen'), extra_classes='inverted', button_map={'submit_button':
+    form_type='inline', extra_classes='inverted', button_map={'submit_button':
     'primary'}) }}
   </div>
   <h2>The same form field</h2>

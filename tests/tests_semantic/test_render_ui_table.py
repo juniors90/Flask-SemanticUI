@@ -14,7 +14,9 @@
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
 from flask import render_template_string, request
+
 from flask_sqlalchemy import SQLAlchemy
+
 from flask_wtf import CSRFProtect
 
 
@@ -22,7 +24,7 @@ def test_render_simple_table(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(db.Integer, primary_key=True)  # noqa: A003
         text = db.Column(db.Text)
 
     @app.route("/table")
@@ -59,7 +61,7 @@ def test_render_customized_table(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(db.Integer, primary_key=True)  # noqa: A003
         text = db.Column(db.Text)
 
     @app.route("/table")
@@ -101,7 +103,7 @@ def test_build_table_titles(app, client):
     db = SQLAlchemy(app)
 
     class Message(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(db.Integer, primary_key=True)  # noqa: A003
         text = db.Column(db.Text)
 
     @app.route("/table")
@@ -159,7 +161,7 @@ def test_customize_icon_title_of_table_actions(app, client):
     CSRFProtect(app)
 
     class Message(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(db.Integer, primary_key=True)  # noqa: A003
         text = db.Column(db.Text)
 
     @app.route("/table")

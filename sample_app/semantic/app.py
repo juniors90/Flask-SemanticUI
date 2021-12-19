@@ -5,35 +5,32 @@ import sys
 
 from flask import (
     Flask,
-    render_template,
-    request,
-    flash,
     Markup,
+    flash,
+    render_template,
     render_template_string,
+    request,
 )
-from flask_wtf import FlaskForm, CSRFProtect
+
+from flask_sqlalchemy import SQLAlchemy
+
+from flask_wtf import CSRFProtect, FlaskForm
+
 from wtforms import (
+    BooleanField,
+    FieldList,
+    FormField,
+    IntegerField,
+    PasswordField,
+    SelectField,
     StringField,
     SubmitField,
-    BooleanField,
-    PasswordField,
-    IntegerField,
     TextField,
-    FormField,
-    SelectField,
-    FieldList,
+    ValidationError,
 )
-from wtforms.fields import (
-    DateField,
-    DateTimeField,
-    FileField,
-    RadioField,
-    SelectMultipleField,
-    TextAreaField,
-    HiddenField,
-)
+from wtforms.fields import FileField, HiddenField, RadioField
 from wtforms.validators import DataRequired, Length
-from flask_sqlalchemy import SQLAlchemy
+
 
 # this path is pointing to project/docs/source
 CURRENT_PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
@@ -65,45 +62,46 @@ db = SQLAlchemy(app)
 csrf = CSRFProtect(app)
 
 
-class ExampleForm(FlaskForm):
-    """An example for semantic style form fields."""
+# straight from the wtforms docs:
+class TelephoneForm(FlaskForm):
+    country_code = IntegerField("Country Code", validators=[DataRequired()])
+    area_code = IntegerField("Area Code/Exchange", validators=[DataRequired()])
+    number = TextField("Number")
 
-    date = DateField(
-        description="We'll never share your email with anyone else."
-    )  # add help text with `description`
-    datetime = DateTimeField(
-        render_kw={"placeholder": "this is a placeholder"}
-    )  # add HTML attribute with `render_kw`
-    image = FileField(render_kw={"class": "my-class"})  # add your class
-    option = RadioField(
-        choices=[
-            ("dog", "Dog"),
-            ("cat", "Cat"),
-            ("bird", "Bird"),
-            ("alien", "Alien"),
-        ]
+
+class ExampleForm(FlaskForm):
+    field1 = TextField("First Field", description="This is field one.")
+    field2 = TextField(
+        "Second Field",
+        description="This is field two.",
+        validators=[DataRequired()],
     )
-    select = SelectField(
+    hidden_field = HiddenField("You cannot see this", description="Nope")
+    radio_field = RadioField(
+        "This is a radio field",
         choices=[
-            ("dog", "Dog"),
-            ("cat", "Cat"),
-            ("bird", "Bird"),
-            ("alien", "Alien"),
-        ]
+            ("head_radio", "Head radio"),
+            ("radio_76fm", "Radio '76 FM"),
+            ("lips_106", "Lips 106"),
+            ("wctr", "WCTR"),
+        ],
     )
-    selectmulti = SelectMultipleField(
-        choices=[
-            ("dog", "Dog"),
-            ("cat", "Cat"),
-            ("bird", "Bird"),
-            ("alien", "Alien"),
-        ]
+    checkbox_field = BooleanField(
+        "This is a checkbox", description="Checkboxes can be tricky."
     )
-    bio = TextAreaField()
-    title = StringField()
-    secret = PasswordField()
-    submit = SubmitField()  # before the remember me
-    remember = BooleanField("Remember me")
+
+    # subforms
+    mobile_phone = FormField(TelephoneForm)
+
+    # you can change the label as well
+    office_phone = FormField(TelephoneForm, label="Your office phone")
+
+    ff = FileField("Sample upload")
+
+    submit_button = SubmitField("Submit Form")
+
+    def validate_hidden_field(self, form, field):
+        raise ValidationError("Always wrong")
 
 
 class HelloForm(FlaskForm):
@@ -135,12 +133,6 @@ class ButtonForm(FlaskForm):
     submit = SubmitField()
     delete = SubmitField()
     cancel = SubmitField()
-
-
-class TelephoneForm(FlaskForm):
-    country_code = IntegerField("Country Code")
-    area_code = IntegerField("Area Code/Exchange")
-    number = TextField("Number")
 
 
 class IMForm(FlaskForm):
@@ -181,7 +173,7 @@ class RadioForm(FlaskForm):
 
 
 class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)  # noqa: A003
     text = db.Column(db.Text, nullable=False)
     author = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(100), nullable=False)
@@ -227,13 +219,13 @@ def test_form():
 
 @app.route("/form-inline")
 def test_form_inline():
-    form = HelloForm()
+    form = ExampleForm()
     return render_template("form_inline.html", form=form)
 
 
 @app.route("/form-inverted")
 def test_form_inverted():
-    form = HelloForm()
+    form = ExampleForm()
     return render_template("form_inverted.html", form=form)
 
 
@@ -380,7 +372,7 @@ def new_message():
 
 
 class Msg(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)  # noqa: A003
     text = db.Column(db.Text)
 
 

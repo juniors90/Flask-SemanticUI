@@ -16,31 +16,42 @@
 # Full Text:
 #    https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
-# =====================================================================
+# =============================================================================
 # DOCS
-# =====================================================================
+# =============================================================================
+
+"""Flask-SemanticUI.
+
+Implementation of SemanticUI in Flask.
+"""
+
+# =============================================================================
+# IMPORTS
+# =============================================================================
+
 
 import warnings
 
-from flask import current_app, Markup, Blueprint, url_for
+from flask import Blueprint, Markup, current_app, url_for
 
 try:  # pragma: no cover
     from wtforms.fields import HiddenField
-except ImportError:
-
+except ImportError:  # pragma: no cover
+    # docstr-coverage:excused `no one is reading this anyways`
     def is_hidden_field_filter(field):
         raise RuntimeError("WTForms is not installed.")
 
 
 else:
-
+    # docstr-coverage:excused `no one is reading this anyways`
     def is_hidden_field_filter(field):
         return isinstance(field, HiddenField)
 
 
-CDN_BASE = "https://cdn.jsdelivr.net/npm"
+cdn_base = "https://cdn.jsdelivr.net/npm"
 
 
+# docstr-coverage:excused `no one is reading this anyways`
 def raise_helper(message):  # pragma: no cover
     raise RuntimeError(message)
 
@@ -61,6 +72,7 @@ def get_table_titles(data, primary_key, primary_key_title):
     return titles
 
 
+# docstr-coverage:excused `no one is reading this anyways`
 def link_css_with_sri(url, sri):
     html = (
         f'<link rel="stylesheet" href="{url}" integrity="{sri}" '
@@ -69,10 +81,12 @@ def link_css_with_sri(url, sri):
     return html
 
 
+# docstr-coverage:excused `no one is reading this anyways`
 def simple_link_css(url):
     return f'<link rel="stylesheet" href="{url}">'
 
 
+# docstr-coverage:excused `no one is reading this anyways`
 def scripts_with_sri(url, sri):
     tag = (
         f'<script src="{url}" integrity="{sri}" '
@@ -81,6 +95,7 @@ def scripts_with_sri(url, sri):
     return tag
 
 
+# docstr-coverage:excused `no one is reading this anyways`
 def simple_scripts_js(url):
     return f'<script src="{url}"></script>'
 
@@ -121,7 +136,7 @@ class _SemanticUI(object):
         app.config.setdefault("SEMANTIC_TABLE_EDIT_TITLE", "Edit")
         app.config.setdefault("SEMANTIC_TABLE_DELETE_TITLE", "Delete")
         app.config.setdefault("SEMANTIC_TABLE_NEW_TITLE", "New")
-        if not hasattr(app, "extensions"):
+        if not hasattr(app, "extensions"):  # pragma: no cover
             app.extensions = {}
         app.extensions["semantic"] = self
         blueprint = Blueprint(
@@ -168,7 +183,7 @@ class _SemanticUI(object):
                 filename=f"{base_path}/{self.semantic_css_filename}",
             )
         else:
-            base_path = CDN_BASE + f"/semantic-ui@{s_version}/dist/"
+            base_path = cdn_base + f"/semantic-ui@{s_version}/dist/"
             url = base_path + self.semantic_css_filename
 
         if semantic_sri:
@@ -191,7 +206,7 @@ class _SemanticUI(object):
                 "semantic.static", filename=f"{base_path}/{paths[name]}"
             )
         else:
-            url = CDN_BASE + f"/{name}@{version}/dist/{paths[name]}"
+            url = cdn_base + f"/{name}@{version}/dist/{paths[name]}"
 
         if sri:
             script_html = scripts_with_sri(url, sri)
