@@ -49,7 +49,7 @@ with open("README.md") as fp:
 setup(
     name="Flask-SemanticUI",
     version=VERSION,
-    description="Implementation of Semantic-UI in Flask",
+    description="Flask extension to allow easy embedding of Semantic-UI CSS Framework.",  # noqa: E501
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     author="Ferreira Juan David",
