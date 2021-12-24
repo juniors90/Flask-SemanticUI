@@ -26,6 +26,7 @@
                     form_type="basic",
                     horizontal_columns=('sixteen', 'sixteen', 'sixteen'),
                     button_map={},
+                    inverted=False,
                     button_style='',
                     button_size='') %}
 
@@ -68,9 +69,8 @@
     {%- elif field.type == 'RadioField' -%}
         {# note: A cleaner solution would be rendering depending on the widget,
         this is just a hack for now, until I can think of something better #}
-        <div class="{% if form_type == "inline" %}inline{%else%}grouped{% endif %}{% if extra_classes %} {{ extra_classes }}{% endif %} fields">
-            
-            {%- if extra_classes == 'inverted' %}
+        <div class="{% if form_type == "inline" %}inline{%else%}grouped{% endif %} fields">
+            {%- if inverted %}
                 {{field.label(style="color: #FFFFFF;")|safe}}
             {%- else -%}
                 {{field.label()|safe}}
@@ -160,6 +160,7 @@
 {% macro render_ui_form(form,
                     action="",
                     method="post",
+                    inverted=None,
                     extra_classes=None,
                     role="form",
                     form_type="basic",
@@ -213,14 +214,14 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
             {%- if id %} id="{{ id }}"{% endif -%}
             {%- if method %} method="{{ method }}"{% endif %}
             class="ui form error
-{%- if extra_classes %} {{ extra_classes }}{% endif -%}{%- if form_type == "inline" %} inline{% endif -%}"
+{%- if inverted %} inverted{% endif -%}{%- if form_type == "inline" %} inline{% endif -%}"
             {%- if _enctype[0] %} enctype="{{ _enctype[0] }}"{% endif -%}
             {%- if role %} role="{{ role }}"{% endif -%}
             {%- if novalidate %} novalidate{% endif -%}
             {%- if render_kw %} {{ render_kw|xmlattr }}{% endif -%}>
         {{ form.hidden_tag() }}
         {%- if form_title != None %}
-            <h4 class="ui dividing header {%- if extra_classes %} {{extra_classes}}{% endif -%}">
+            <h4 class="ui dividing header {%- if inverted %} inverted{% endif -%}">
                 {{form_title}}
             </h4>
         {% endif -%}
@@ -228,6 +229,7 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
             {% if not semantic_is_hidden_field(field) -%}
                 {{ render_ui_field(field,
                     form_type=form_type,
+                    inverted=inverted,
                     horizontal_columns=horizontal_columns,
                     button_map=button_map,
                     button_style=button_style,
