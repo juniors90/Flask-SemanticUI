@@ -69,6 +69,13 @@ For development, clone the [official github repository](https://github.com/junio
 Please submit bug reports, suggestions for improvements and patches via
 the (E-mail: juandavid9a0@gmail.com).
 
+## Contributors
+Credits goes to these peoples:
+
+<a href="https://github.com/juniors90/Flask-SemanticUI/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=juniors90/Flask-SemanticUI" />
+</a>
+
 ## Official repository and Issues
 
 - https://github.com/juniors90/Flask-SemanticUI
