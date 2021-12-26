@@ -31,11 +31,11 @@
                         {{ render_ui_nav_item('test_form_inverted', 'Form Inverted', 'mail', 'teal') }}
                     </div>
                 </div>
-                {{ render_ui_nav_item('test_nav', 'Nav', 'home', 'teal') }}
-                {{ render_ui_nav_item('test_pagination', 'Pagination', 'home', 'teal') }}
-                {{ render_ui_nav_item('test_flash', 'Flash Messages', 'home', 'teal') }}
-                {{ render_ui_nav_item('test_table', 'Table', 'home', 'teal') }}
-                {{ render_ui_nav_item('test_icon', 'Icon', 'home', 'teal') }}
+                {{ render_ui_nav_item('test_nav', 'Nav', 'list', 'teal') }}
+                {{ render_ui_nav_item('test_pagination', 'Pagination', 'arrows alternate horizontal', 'teal') }}
+                {{ render_ui_nav_item('test_flash', 'Flash Messages', 'envelope', 'teal') }}
+                {{ render_ui_nav_item('test_table', 'Table', 'table', 'teal') }}
+                {{ render_ui_nav_item('test_icon', 'Icon', 'code', 'teal') }}
                 
                 <div class="ui simple dropdown teal item">
                     Sample dropdown <i class="dropdown icon"></i>
@@ -54,8 +54,10 @@
         </div>
     
     <main class="ui text container" style="padding-top: 1em; padding-bottom: 1em;">
-        {{ render_ui_messages(container=True, dismissible=True) }}
+        <div id="alert">
+        {{ render_ui_messages(container=False, dismissible=True, title="title") }}
         {% block content %}{% endblock %}
+        </div>
     </main>
     
     <footer class="ui text center">

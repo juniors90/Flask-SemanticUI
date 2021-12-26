@@ -38,8 +38,8 @@ def test_render_ui_form(app, client, example_form):
                 {% from "semantic/form_ui.html" import render_ui_form %}
                 {{ render_ui_form(form,
                                   form_title='Title for Shipping Information',
-                                  extra_classes='inverted',
-                                  form_type='inverted',
+                                  inverted=true,
+                                  form_type='inline',
                                   button_map={'submit_button': 'primary'})}}
                 """,
             form=form,
@@ -52,6 +52,12 @@ def test_render_ui_form(app, client, example_form):
     assert '<input class="" id="country_code"' in data
     assert '<input id="radio_field-0" name="radio_field"' in data
     assert '<input class=" ui primary button " id="submit_button"' in data
+    assert 'class="ui form error inverted inline" role="form">' in data
+    assert (
+        '<label for="radio_field" style="color: #FFFFFF;">'
+        + "This is a radio field</label>"
+        in data
+    )
 
 
 # test WTForm field description for TextFieldField

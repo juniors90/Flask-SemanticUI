@@ -26,7 +26,7 @@
                     form_type="basic",
                     horizontal_columns=('sixteen', 'sixteen', 'sixteen'),
                     button_map={},
-                    inverted=False,
+                    inverted=None,
                     button_style='',
                     button_size='') %}
 
@@ -214,7 +214,7 @@ action="" is what we want, from http://www.ietf.org/rfc/rfc2396.txt:
             {%- if id %} id="{{ id }}"{% endif -%}
             {%- if method %} method="{{ method }}"{% endif %}
             class="ui form error
-{%- if inverted %} inverted{% endif -%}{%- if form_type == "inline" %} inline{% endif -%}"
+{%- if extra_classes %} {{ extra_classes }}{% endif -%}{%- if inverted %} inverted{% endif -%}{%- if form_type == "inline" %} inline{% endif -%}"
             {%- if _enctype[0] %} enctype="{{ _enctype[0] }}"{% endif -%}
             {%- if role %} role="{{ role }}"{% endif -%}
             {%- if novalidate %} novalidate{% endif -%}

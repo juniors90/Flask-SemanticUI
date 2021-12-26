@@ -74,11 +74,7 @@ def get_table_titles(data, primary_key, primary_key_title):
 
 # docstr-coverage:excused `no one is reading this anyways`
 def link_css_with_sri(url, sri):
-    html = (
-        f'<link rel="stylesheet" href="{url}" integrity="{sri}" '
-        + 'crossorigin="anonymous">'
-    )
-    return html
+    return f'<link rel="stylesheet" href="{url}" integrity="{sri}" crossorigin="anonymous">'  # noqa: E501
 
 
 # docstr-coverage:excused `no one is reading this anyways`
@@ -88,11 +84,7 @@ def simple_link_css(url):
 
 # docstr-coverage:excused `no one is reading this anyways`
 def scripts_with_sri(url, sri):
-    tag = (
-        f'<script src="{url}" integrity="{sri}" '
-        + 'crossorigin="anonymous"></script>'
-    )
-    return tag
+    return f'<script src="{url}" integrity="{sri}" crossorigin="anonymous"></script>'  # noqa: E501
 
 
 # docstr-coverage:excused `no one is reading this anyways`
@@ -201,10 +193,8 @@ class _SemanticUI(object):
         }
 
         if serve_local:
-            base_path = "js/semantic"
-            url = url_for(
-                "semantic.static", filename=f"{base_path}/{paths[name]}"
-            )
+            path = "js/semantic"
+            url = url_for("semantic.static", filename=f"{path}/{paths[name]}")
         else:
             url = cdn_base + f"/{name}@{version}/dist/{paths[name]}"
 
@@ -265,7 +255,5 @@ class _SemanticUI(object):
         sui_js = self._get_js_script(version, "semantic-ui", sui_sri)
         jquery_sri = self._get_sri("jquery", jq_version, jquery_sri)
         jquery = self._get_js_script(jq_version, "jquery", jquery_sri)
-        return Markup(
-            f"""{jquery}
-            {sui_js}"""
-        )
+        return Markup(f"""{jquery}
+                          {sui_js}""")

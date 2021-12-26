@@ -231,7 +231,8 @@ def test_form_inverted():
 
 @app.route("/form-inline-inverted", methods=["GET", "POST"])
 def test_form_inline_inverted():
-    form = HelloForm()
+    # form = HelloForm()
+    form = ExampleForm()
     if form.validate_on_submit():
         data = request.form.to_dict()
         print(data)

@@ -76,11 +76,11 @@ def test_render_ui_messages(app, client):
 
     response = client.get("/container")
     data = response.get_data(as_text=True)
-    assert '<div id="alert" class="ui text container">' in data
+    assert '<div class="ui text container">' in data
 
     response = client.get("/dismissible")
     data = response.get_data(as_text=True)
-    assert '<i id="close-icon" class="close icon"></i>' in data
+    assert '<i class="close icon"></i>' in data
     assert '<ul class="list">' not in data
     assert "test message" in data
 
