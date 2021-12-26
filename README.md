@@ -6,6 +6,7 @@
 [![Forks](https://img.shields.io/github/forks/juniors90/Flask-SemanticUI)](https://github.com/juniors90/Flask-SemanticUI/stargazers)
 [![star](https://img.shields.io/github/stars/juniors90/Flask-SemanticUI?color=yellow)](https://github.com/juniors90/Flask-SemanticUI/network/members)
 [![issues](https://img.shields.io/github/issues/juniors90/Flask-SemanticUI?color=teal)](https://github.com/juniors90/Flask-SemanticUI/issues)
+[![GitHub contributors](https://img.shields.io/github/contributors/juniors90/Flask-SemanticUI?color=green)](https://github.com/juniors90/Flask-SemanticUI/graphs/contributors)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
