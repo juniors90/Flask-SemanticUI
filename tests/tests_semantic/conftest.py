@@ -15,7 +15,7 @@
 
 import re
 
-from flask_semantic import SemanticUI
+from flask_semanticui import SemanticUI
 
 import pytest as pt
 

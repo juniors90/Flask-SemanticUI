@@ -13,7 +13,7 @@
 # License: MIT
 # Full Text: https://github.com/juniors90/Flask-SemanticUI/blob/master/LICENSE
 
-from flask_semantic import (
+from flask_semanticui import (
     link_css_with_sri,
     scripts_with_sri,
     simple_link_css,

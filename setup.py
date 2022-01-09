@@ -55,7 +55,7 @@ setup(
     author="Ferreira Juan David",
     author_email="juandavid9a0@gmail.com",
     url="https://github.com/juniors90/Flask-SemanticUI",
-    packages=["flask_semantic"],
+    packages=["flask_semanticui"],
     include_package_data=True,
     platforms="any",
     license="The MIT License",

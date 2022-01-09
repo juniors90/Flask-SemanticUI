@@ -122,6 +122,15 @@ class _SemanticUI(object):
         app.config.setdefault("SEMANTIC_ICON_COLOR", None)
         app.config.setdefault("SEMANTIC_ICON_SIZE", None)
         app.config.setdefault(
+            "SEMANTIC_ERROR_HEADER", "Action Forbidden"
+        )  # noqa: E501
+        app.config.setdefault(
+            "SEMANTIC_CHECKBOX_HEADER_ERROR", "Action Forbidden"
+        )  # noqa: E501
+        app.config.setdefault(
+            "SEMANTIC_RADIO_HEADER_ERROR", "Action Forbidden"
+        )  # noqa: E501
+        app.config.setdefault(
             "SEMANTIC_MSG_CATEGORY", None
         )  # change primary by None
         app.config.setdefault("SEMANTIC_TABLE_VIEW_TITLE", "View")

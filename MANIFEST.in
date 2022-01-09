@@ -1,17 +1,17 @@
 include LICENSE
 include README.md
-recursive-include flask_semantic *.css
-recursive-include flask_semantic *.eot
-recursive-include flask_semantic *.html
-recursive-include flask_semantic *.js
-recursive-include flask_semantic *.map
-recursive-include flask_semantic *.otf
-recursive-include flask_semantic *.png
-recursive-include flask_semantic *.py
-recursive-include flask_semantic *.svg
-recursive-include flask_semantic *.ttf
-recursive-include flask_semantic *.woff
-recursive-include flask_semantic *.woff2
+recursive-include flask_semanticui *.css
+recursive-include flask_semanticui *.eot
+recursive-include flask_semanticui *.html
+recursive-include flask_semanticui *.js
+recursive-include flask_semanticui *.map
+recursive-include flask_semanticui *.otf
+recursive-include flask_semanticui *.png
+recursive-include flask_semanticui *.py
+recursive-include flask_semanticui *.svg
+recursive-include flask_semanticui *.ttf
+recursive-include flask_semanticui *.woff
+recursive-include flask_semanticui *.woff2
 include CHANGELOG.rst
 
 

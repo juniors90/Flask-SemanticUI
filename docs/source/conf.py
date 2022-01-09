@@ -21,7 +21,7 @@ FLASK_SEMANTIC_PATH = CURRENT_PATH.parent.parent
 
 sys.path.insert(0, str(FLASK_SEMANTIC_PATH))
 
-import flask_semantic
+import flask_semanticui
 
 
 # -- Project information -----------------------------------------------------
@@ -31,7 +31,7 @@ copyright = f"{datetime.date.today().year}, Ferreira Juan David"
 author = "Ferreira, Juan David"
 
 # The full version, including alpha/beta/rc tags
-release = flask_semantic.__version__
+release = flask_semanticui.__version__
 
 
 # -- General configuration ---------------------------------------------------

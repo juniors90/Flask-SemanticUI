@@ -1,7 +1,7 @@
-flask_semantic
-==============
+flask_semanticui
+================
 
 .. toctree::
    :maxdepth: 4
 
-   flask_semantic
+   flask_semanticui

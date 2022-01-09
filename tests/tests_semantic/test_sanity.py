@@ -15,12 +15,12 @@
 
 
 def test_can_import_package():
-    import flask_semantic  # noqa
+    import flask_semanticui  # noqa
 
 
 def test_can_initialize_app_and_extesion():
     from flask import Flask
-    from flask_semantic import SemanticUI
+    from flask_semanticui import SemanticUI
 
     app = Flask(__name__)
     SemanticUI(app)
@@ -28,7 +28,7 @@ def test_can_initialize_app_and_extesion():
 
 def test_can_initialize_app_and_extesion_with_factory_func():
     from flask import Flask
-    from flask_semantic import SemanticUI
+    from flask_semanticui import SemanticUI
 
     app = Flask(__name__)
     semantic = SemanticUI()

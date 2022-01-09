@@ -23,7 +23,7 @@
 
 from flask import current_app
 
-from flask_semantic import cdn_base
+from flask_semanticui import cdn_base
 
 import pytest as pt
 

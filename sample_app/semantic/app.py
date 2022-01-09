@@ -38,7 +38,7 @@ FLASK_SEMANTIC_PATH = CURRENT_PATH.parent.parent
 
 sys.path.insert(0, str(FLASK_SEMANTIC_PATH))
 
-from flask_semantic import SemanticUI  # noqa
+from flask_semanticui import SemanticUI  # noqa
 
 app = Flask(__name__)
 # app.secret_key = 'dev'
@@ -288,7 +288,7 @@ def test_flash():
     return render_template("flash.html")
 
 
-@app.route("/table")
+@app.route("/tables")
 def test_table():
     page = request.args.get("page", 1, type=int)
     pagination = Message.query.paginate(page, per_page=10)
@@ -306,42 +306,42 @@ def test_table():
     )
 
 
-@app.route("/table/<int:message_id>/view")
+@app.route("/tables/<int:message_id>/view")
 def view_message(message_id):
     message = Message.query.get(message_id)
     not_exist_msg = (
         f"Could not view message {message_id}"
         + " as it does not exist. Return to "
-        + '<a href="/table">table</a>.'
+        + '<a href="/tables">table</a>.'
     )
     exist_msg = (
         f"Viewing {message_id}"
         + ' with text "{message.text}".'
-        + ' Return to <a href="/table">table</a>.'
+        + ' Return to <a href="/tables">table</a>.'
     )
     if message:
         return exist_msg
     return not_exist_msg
 
 
-@app.route("/table/<int:message_id>/edit")
+@app.route("/tables/<int:message_id>/edit")
 def edit_message(message_id):
     message = Message.query.get(message_id)
     not_exist_msg = (
         f"Message {message_id} did not exist and could therefore"
-        + ' not be edited. Return to <a href="/table">table</a>.'
+        + ' not be edited. Return to <a href="/tables">table</a>.'
     )
     if message:
         message.draft = not message.draft
         db.session.commit()
         return (
             f"Message {message_id} has been editted by toggling draft status."
-            + ' Return to <a href="/table">table</a>.'
+            + ' Return to <a href="/tables">table</a>.'
         )
     return not_exist_msg
 
 
-@app.route("/table/<int:message_id>/delete", methods=["POST"])
+@app.route("/tables/<int:message_id>/delete", methods=["POST"])
 def delete_message(message_id):
     message = Message.query.get(message_id)
     if message:
@@ -349,26 +349,26 @@ def delete_message(message_id):
         db.session.commit()
         return (
             f"Message {message_id} has been deleted. Return to"
-            + ' <a href="/table">table</a>.'
+            + ' <a href="/tables">table</a>.'
         )
     return (
         f"Message {message_id} did not exist and could therefore not be"
-        + ' deleted. Return to <a href="/table">table</a>.'
+        + ' deleted. Return to <a href="/tables">table</a>.'
     )
 
 
-@app.route("/table/<int:message_id>/like")
+@app.route("/tables/<int:message_id>/like")
 def like_message(message_id):
     return (
         f"Liked the message {message_id}. Return to "
-        + '<a href="/table">table</a>.'
+        + '<a href="/tables">table</a>.'
     )
 
 
-@app.route("/table/new-message")
+@app.route("/tables/new-message")
 def new_message():
     return (
-        'Here is the new message page. Return to <a href="/table">table</a>.'
+        'Here is the new message page. Return to <a href="/tables">table</a>.'
     )
 
 
