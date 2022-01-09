@@ -31,7 +31,7 @@ PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 REQUIREMENTS = ["Flask>=2.0.2"]
 
-with open(PATH / "flask_semantic" / "__init__.py") as fp:
+with open(PATH / "flask_semanticui" / "__init__.py") as fp:
     for line in fp.readlines():
         if line.startswith("__version__ = "):
             VERSION = line.split("=", 1)[-1].replace('"', "").strip()
